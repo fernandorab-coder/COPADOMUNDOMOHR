@@ -20,9 +20,11 @@
       --silver: #aeb6bd;
       --bronze: #b87333;
     }
+
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
       background: var(--bg);
@@ -30,29 +32,35 @@
       font-family: Arial, Helvetica, sans-serif;
       line-height: 1.35;
     }
+
     header {
       padding: 24px 18px 18px;
       background: var(--head);
       color: #fff;
     }
+
     .wrap {
       width: min(1240px, calc(100% - 28px));
       margin: 0 auto;
     }
+
     h1 {
       margin: 0 0 8px;
       font-size: clamp(24px, 4vw, 38px);
       letter-spacing: 0;
     }
+
     body.logged-in h1 {
       font-size: clamp(14px, 2.4vw, 23px);
     }
+
     .sub {
       margin: 0;
       max-width: 850px;
       color: #e7f0ed;
       font-size: 15px;
     }
+
     .rules-divider {
       display: block;
       width: min(520px, 100%);
@@ -60,10 +68,12 @@
       margin: 8px 0 6px;
       background: rgba(255, 255, 255, 0.35);
     }
+
     .rules-spacer {
       display: block;
       height: 4px;
     }
+
     .toolbar {
       display: grid;
       grid-template-columns: minmax(180px, 1fr) 170px 170px 190px auto auto;
@@ -71,6 +81,7 @@
       align-items: center;
       padding: 14px 0;
     }
+
     label {
       display: grid;
       gap: 4px;
@@ -79,9 +90,2197 @@
       font-weight: 400;
       text-transform: none;
     }
+
     [hidden] {
       display: none !important;
     }
+
     input,
     select,
     button {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--field);
+      color: var(--ink);
+      font: inherit;
+    }
+
+    input,
+    select {
+      padding: 8px 10px;
+    }
+
+    button {
+      cursor: pointer;
+      padding: 8px 12px;
+      font-weight: 400;
+      background: #fff;
+    }
+
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    input:focus,
+    select:focus,
+    button:focus {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    main {
+      padding-bottom: 28px;
+    }
+
+    .table-shell {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .table-shell::after {
+      content: "Arraste para o lado para ver toda a tabela";
+      display: none;
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      background: #fbfcf8;
+      border-top: 1px solid var(--line);
+    }
+
+    .ranking {
+      display: grid;
+      gap: 10px;
+      margin: 8px 0 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .ranking h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .ranking-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .rank-card {
+      display: grid;
+      gap: 3px;
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfcf8;
+    }
+
+    .rank-card.gold {
+      border-color: var(--gold);
+      background: #fff9df;
+    }
+
+    .rank-card.silver {
+      border-color: var(--silver);
+      background: #f1f4f6;
+    }
+
+    .rank-card.bronze {
+      border-color: var(--bronze);
+      background: #fff0e2;
+    }
+
+    .rank-place {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    .medal {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      margin-right: 6px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 400;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.55), inset 0 -3px 5px rgba(0, 0, 0, 0.22), 0 1px 2px rgba(0, 0, 0, 0.14);
+      vertical-align: middle;
+    }
+
+    .medal.gold {
+      background: var(--gold);
+    }
+
+    .medal.silver {
+      background: var(--silver);
+      color: #17211f;
+    }
+
+    .medal.bronze {
+      background: var(--bronze);
+    }
+
+    .rank-name {
+      font-weight: 400;
+    }
+
+    .rank-score {
+      color: var(--head);
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 7px 5px;
+      text-align: left;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: 0;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #e9efec;
+      color: #23312e;
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fbfcf8;
+    }
+
+    tbody tr.hit-row td {
+      background: #e6f6ec;
+    }
+
+    tbody tr.exact-row td {
+      background: #fff3c4;
+    }
+
+    .phase-row td {
+      background: var(--head);
+      color: #fff;
+      text-align: left;
+    }
+
+    .num {
+      width: 48px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .score {
+      width: 54px;
+      text-align: center;
+    }
+
+    .score input {
+      width: 42px;
+      min-height: 30px;
+      padding: 4px;
+      text-align: center;
+      font-weight: 400;
+      background: #fff;
+    }
+
+    .points {
+      width: 54px;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    .save-col {
+      width: 82px;
+      text-align: center;
+    }
+
+    .save-col button {
+      min-height: 30px;
+      padding: 4px 7px;
+      font-size: 12px;
+    }
+
+    .saved-badge {
+      display: inline-block;
+      padding: 5px 7px;
+      border-radius: 6px;
+      background: #e9efec;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .comparison {
+      margin-top: 16px;
+    }
+
+    .extras {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+      align-items: end;
+      margin: 0 0 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .extras h2 {
+      grid-column: 1 / -1;
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .extras button {
+      width: 70px;
+      min-height: 30px;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .extras-summary {
+      grid-column: 1 / -1;
+      display: none;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: #fbfcf8;
+      white-space: nowrap;
+    }
+
+    .extras-item {
+      display: inline-block;
+      padding: 5px 10px;
+      border-right: 1px solid var(--line);
+    }
+
+    .extras-item:first-child {
+      padding-left: 0;
+    }
+
+    .extras-item:last-child {
+      border-right: 0;
+      padding-right: 0;
+    }
+
+    .extras-value {
+      font-weight: 700;
+    }
+
+    .comparison h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .comparison table {
+      min-width: 0;
+      font-size: 14px;
+    }
+
+    .match-cell {
+      width: 24%;
+      min-width: 0;
+      font-weight: 400;
+    }
+
+    .guess-cell {
+      width: 8%;
+      min-width: 0;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .guess-points {
+      display: inline;
+      margin-left: 3px;
+      color: var(--accent);
+      font-size: inherit;
+      font-weight: 400;
+    }
+
+    .official-inline {
+      margin-left: 4px;
+      color: var(--muted);
+      font-size: 0.86em;
+    }
+
+    .official-inline.left {
+      margin-left: 0;
+      margin-right: 4px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: none;
+    }
+
+    .login-panel {
+      display: grid;
+      gap: 14px;
+      max-width: 440px;
+      margin: 18px auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .login-panel h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .login-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .login-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .login-error {
+      min-height: 18px;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .session-bar {
+      display: none;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      color: #e7f0ed;
+      font-weight: 400;
+    }
+
+    .session-bar button {
+      min-height: 34px;
+      padding: 6px 10px;
+    }
+
+    body.logged-in .session-bar {
+      display: flex;
+    }
+
+    .header-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .header-copy {
+      min-width: 0;
+    }
+
+    body.logged-in #loginPanel {
+      display: none;
+    }
+
+    body:not(.logged-in) #appContent {
+      display: none;
+    }
+
+    body:not(.logged-in) .sub,
+    body:not(.logged-in) .session-bar {
+      display: none;
+    }
+
+    body:not(.logged-in) .header-grid {
+      display: block;
+      text-align: center;
+    }
+
+    body.participant-mode .admin-only,
+    body.participant-mode .meta {
+      display: none;
+    }
+
+    body.admin-mode .participant-save,
+    body.admin-mode .participant-only {
+      display: none;
+    }
+
+    body.participant-mode .admin-save {
+      display: none;
+    }
+
+    .stage {
+      width: 120px;
+      font-weight: 400;
+      color: var(--head);
+    }
+
+    .team {
+      width: 17%;
+      min-width: 0;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .date {
+      width: 92px;
+      white-space: nowrap;
+    }
+
+    .group {
+      width: 44px;
+      text-align: center;
+    }
+
+    .meta {
+      padding: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta a {
+      color: var(--head);
+      font-weight: 400;
+    }
+
+    @media (max-width: 860px) {
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .extras {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toolbar label:first-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .session-bar {
+        justify-content: flex-start;
+        order: -1;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .extras {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding-top: 20px;
+      }
+    }
+
+
+    /* Ajustes responsivos para celular */
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(100% - 18px, 1240px);
+      }
+
+      header {
+        padding: 16px 10px 14px;
+      }
+
+      h1,
+      body.logged-in h1 {
+        font-size: 20px;
+        line-height: 1.15;
+      }
+
+      .sub {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .login-panel {
+        max-width: none;
+        margin: 12px 0;
+        padding: 14px;
+      }
+
+      .login-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .login-actions button,
+      .extras button,
+      .session-bar button,
+      button.primary {
+        width: 100%;
+      }
+
+      input,
+      select,
+      button {
+        width: 100%;
+        min-height: 42px;
+        font-size: 16px;
+      }
+
+      .ranking {
+        padding: 10px;
+        margin: 8px 0 10px;
+      }
+
+      .ranking h2,
+      .extras h2,
+      .comparison h2 {
+        font-size: 18px;
+      }
+
+      .ranking-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .rank-card {
+        min-height: 62px;
+        padding: 8px;
+      }
+
+      .rank-score {
+        font-size: 18px;
+      }
+
+      .extras {
+        padding: 10px;
+        gap: 8px;
+      }
+
+      .extras-summary {
+        white-space: normal;
+      }
+
+      .extras-item {
+        display: block;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 7px 0;
+      }
+
+      .extras-item:last-child {
+        border-bottom: 0;
+      }
+
+      .toolbar {
+        gap: 8px;
+      }
+
+      .table-shell {
+        border-radius: 6px;
+      }
+
+      .table-shell::after {
+        display: block;
+      }
+
+      table {
+        min-width: 820px;
+        font-size: 12px;
+      }
+
+      .comparison table {
+        min-width: 1040px;
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 6px 4px;
+      }
+
+      .num {
+        width: 42px;
+      }
+
+      .date {
+        width: 78px;
+      }
+
+      .stage {
+        width: 96px;
+      }
+
+      .team {
+        width: 130px;
+      }
+
+      .score {
+        width: 48px;
+      }
+
+      .score input {
+        width: 38px;
+        min-height: 34px;
+        font-size: 16px;
+        padding: 4px;
+      }
+
+      .save-col {
+        width: 74px;
+      }
+
+      .save-col button {
+        min-height: 34px;
+        font-size: 12px;
+        padding: 4px 6px;
+      }
+
+      .saved-badge {
+        padding: 5px 6px;
+        font-size: 11px;
+      }
+
+      .session-bar {
+        display: none;
+        width: 100%;
+        justify-content: stretch;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      body.logged-in .session-bar {
+        display: flex;
+      }
+
+      .header-grid {
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .ranking-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1,
+      body.logged-in h1 {
+        font-size: 18px;
+      }
+
+      .wrap {
+        width: min(100% - 12px, 1240px);
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      header,
+      .toolbar,
+      .meta {
+        display: none;
+      }
+
+      .wrap {
+        width: 100%;
+      }
+
+      .table-shell {
+        overflow: visible;
+        border: 0;
+      }
+
+      table {
+        min-width: 0;
+        font-size: 10px;
+      }
+
+      th {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="header-grid">
+        <div class="header-copy">
+          <h1>Copa do Mundo 2026 | Mohr Print</h1>
+          <p class="sub">
+            Regulamento das apostas:<br>
+            <span class="rules-spacer"></span>
+            • Acertar o campeão: 7 pontos<br>
+            • Acertar a fase em que o Brasil encerra sua participação: 5 pontos<br>
+            • Acertar se o Brasil fará 11 ou mais gols: 3 pontos<br>
+            • Acertar o placar exato dos jogos: 3 pontos<br>
+            • Acertar vitória, derrota ou empate: 1 ponto<br>
+            <span class="rules-divider"></span>
+            *Prazo para apostar na fase de grupos e apostas extras: 10/06/2026 às 18h00<br>
+            *Prazo para apostar no mata-mata: 1 dia antes do jogo até 18h00<br>
+            *O resultado dos jogos será apurado até a prorrogação.
+          </p>
+        </div>
+        <div class="session-bar">
+          <span id="sessionInfo"></span>
+          <button id="logoutBtn" type="button">Sair</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="loginPanel" class="login-panel" aria-label="Login do bolao">
+      <h2>Login</h2>
+      <label>
+        Usuario
+        <select id="loginUser"></select>
+      </label>
+      <label id="loginPasswordWrap">
+        <span id="loginPasswordLabel">Senha</span>
+        <input id="loginPin" type="password" autocomplete="current-password" placeholder="Digite sua senha">
+      </label>
+      <label id="loginConfirmWrap" hidden>
+        <span>Confirmar senha</span>
+        <input id="loginConfirmPin" type="password" autocomplete="new-password" placeholder="Digite novamente">
+      </label>
+      <div class="login-actions">
+        <button id="loginBtn" class="primary" type="button">Entrar</button>
+        <span id="loginError" class="login-error"></span>
+      </div>
+    </section>
+
+    <div id="appContent">
+    <section class="ranking" aria-label="Ranking do bolao">
+      <h2>Ranking</h2>
+      <div id="rankingGrid" class="ranking-grid"></div>
+      <div class="hint">Classificacao geral do bolao, atualizada conforme os placares oficiais forem preenchidos.</div>
+    </section>
+
+    <section class="extras" aria-label="Apostas extras">
+      <h2>Apostas extras</h2>
+      <label class="extras-form">
+        Campeao
+        <select id="championPick"></select>
+      </label>
+      <label class="extras-form">
+        Fase do Brasil
+        <select id="brazilPick">
+          <option value="">Selecione</option>
+          <option>Fase de grupos</option>
+          <option>Fase de 32</option>
+          <option>Oitavas</option>
+          <option>Quartas</option>
+          <option>Semifinal</option>
+          <option>Final</option>
+        </select>
+      </label>
+      <label class="extras-form">
+        Brasil 11+ gols
+        <select id="brazilGoalsPick">
+          <option value="">Selecione</option>
+          <option>Sim</option>
+          <option>Nao</option>
+        </select>
+      </label>
+      <button id="saveExtrasBtn" class="participant-only extras-form" type="button">Salvar</button>
+      <div id="extrasSummary" class="extras-summary"></div>
+      <div id="extrasStatus" class="hint"></div>
+    </section>
+
+    <section class="toolbar" aria-label="Filtros da tabela">
+      <label>
+        Buscar
+        <input id="search" type="search" placeholder="Selecao, fase...">
+      </label>
+      <label>
+        Fase
+        <select id="stageFilter">
+          <option value="">Todas</option>
+        </select>
+      </label>
+      <label id="groupFilterWrap" hidden>
+        Grupo
+        <select id="groupFilter">
+          <option value="">Todos</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="table-shell">
+      <table>
+        <thead>
+          <tr>
+            <th class="num">Jogo</th>
+            <th class="date">Data</th>
+            <th class="stage">Fase</th>
+            <th class="group">Grupo</th>
+            <th class="team">Equipe 1</th>
+            <th class="score admin-only">Oficial</th>
+            <th class="score admin-only">Oficial</th>
+            <th class="score admin-only">Pen.</th>
+            <th class="score admin-only">Pen.</th>
+            <th class="score participant-only">Palpite</th>
+            <th class="score participant-only">Palpite</th>
+            <th class="team">Equipe 2</th>
+            <th class="save-col admin-save">Salvar</th>
+            <th class="points participant-only">Pontos</th>
+            <th class="save-col participant-save">Salvar</th>
+          </tr>
+        </thead>
+        <tbody id="matchesBody"></tbody>
+      </table>
+    </section>
+
+    <section class="comparison" aria-label="Todos os palpites">
+      <h2>Todos os palpites</h2>
+      <div class="table-shell">
+        <table>
+          <thead id="comparisonHead"></thead>
+          <tbody id="comparisonBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="meta">Fonte base: calendario oficial da FIFA e lista atualizada da FourFourTwo em 8 de abril de 2026.</p>
+    </div>
+  </main>
+
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJYKei1859HKLMywP-Z_1XG4kWf2IMaxg",
+      authDomain: "bolaomohr.firebaseapp.com",
+      projectId: "bolaomohr",
+      storageBucket: "bolaomohr.firebasestorage.app",
+      messagingSenderId: "597521933125",
+      appId: "1:597521933125:web:fcc0aa9465d2a4caac142c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+
+    const matches = [
+      {n:1,d:"2026-06-11",s:"Fase de grupos",g:"A",a:"Mexico",b:"Africa do Sul",v:"Mexico City Stadium"},
+      {n:2,d:"2026-06-11",s:"Fase de grupos",g:"A",a:"Coreia do Sul",b:"Tchequia",v:"Estadio Guadalajara"},
+      {n:3,d:"2026-06-12",s:"Fase de grupos",g:"B",a:"Canada",b:"Bosnia e Herzegovina",v:"Toronto Stadium"},
+      {n:4,d:"2026-06-12",s:"Fase de grupos",g:"D",a:"Estados Unidos",b:"Paraguai",v:"Los Angeles Stadium"},
+      {n:5,d:"2026-06-13",s:"Fase de grupos",g:"C",a:"Brasil",b:"Marrocos",v:"Boston Stadium"},
+      {n:6,d:"2026-06-13",s:"Fase de grupos",g:"D",a:"Australia",b:"Turquia",v:"BC Place Vancouver"},
+      {n:7,d:"2026-06-13",s:"Fase de grupos",g:"C",a:"Haiti",b:"Escocia",v:"New York New Jersey Stadium"},
+      {n:8,d:"2026-06-13",s:"Fase de grupos",g:"B",a:"Catar",b:"Suica",v:"San Francisco Bay Area Stadium"},
+      {n:9,d:"2026-06-14",s:"Fase de grupos",g:"E",a:"Costa do Marfim",b:"Equador",v:"Philadelphia Stadium"},
+      {n:10,d:"2026-06-14",s:"Fase de grupos",g:"E",a:"Alemanha",b:"Curacao",v:"Houston Stadium"},
+      {n:11,d:"2026-06-14",s:"Fase de grupos",g:"F",a:"Paises Baixos",b:"Japao",v:"Dallas Stadium"},
+      {n:12,d:"2026-06-14",s:"Fase de grupos",g:"F",a:"Suecia",b:"Tunisia",v:"Estadio Monterrey"},
+      {n:13,d:"2026-06-15",s:"Fase de grupos",g:"H",a:"Arabia Saudita",b:"Uruguai",v:"Miami Stadium"},
+      {n:14,d:"2026-06-15",s:"Fase de grupos",g:"H",a:"Espanha",b:"Cabo Verde",v:"Atlanta Stadium"},
+      {n:15,d:"2026-06-15",s:"Fase de grupos",g:"G",a:"Ira",b:"Nova Zelandia",v:"Los Angeles Stadium"},
+      {n:16,d:"2026-06-15",s:"Fase de grupos",g:"G",a:"Belgica",b:"Egito",v:"Seattle Stadium"},
+      {n:17,d:"2026-06-16",s:"Fase de grupos",g:"I",a:"Franca",b:"Senegal",v:"New York New Jersey Stadium"},
+      {n:18,d:"2026-06-16",s:"Fase de grupos",g:"I",a:"Iraque",b:"Noruega",v:"Boston Stadium"},
+      {n:19,d:"2026-06-16",s:"Fase de grupos",g:"J",a:"Argentina",b:"Argelia",v:"Kansas City Stadium"},
+      {n:20,d:"2026-06-16",s:"Fase de grupos",g:"J",a:"Austria",b:"Jordania",v:"San Francisco Bay Area Stadium"},
+      {n:21,d:"2026-06-17",s:"Fase de grupos",g:"L",a:"Gana",b:"Panama",v:"Toronto Stadium"},
+      {n:22,d:"2026-06-17",s:"Fase de grupos",g:"L",a:"Inglaterra",b:"Croacia",v:"Dallas Stadium"},
+      {n:23,d:"2026-06-17",s:"Fase de grupos",g:"K",a:"Portugal",b:"RD Congo",v:"Houston Stadium"},
+      {n:24,d:"2026-06-17",s:"Fase de grupos",g:"K",a:"Uzbequistao",b:"Colombia",v:"Mexico City Stadium"},
+      {n:25,d:"2026-06-18",s:"Fase de grupos",g:"A",a:"Tchequia",b:"Africa do Sul",v:"Atlanta Stadium"},
+      {n:26,d:"2026-06-18",s:"Fase de grupos",g:"B",a:"Suica",b:"Bosnia e Herzegovina",v:"Los Angeles Stadium"},
+      {n:27,d:"2026-06-18",s:"Fase de grupos",g:"B",a:"Canada",b:"Catar",v:"BC Place Vancouver"},
+      {n:28,d:"2026-06-18",s:"Fase de grupos",g:"A",a:"Mexico",b:"Coreia do Sul",v:"Estadio Guadalajara"},
+      {n:29,d:"2026-06-19",s:"Fase de grupos",g:"C",a:"Escocia",b:"Marrocos",v:"Philadelphia Stadium"},
+      {n:30,d:"2026-06-19",s:"Fase de grupos",g:"C",a:"Brasil",b:"Haiti",v:"Boston Stadium"},
+      {n:31,d:"2026-06-19",s:"Fase de grupos",g:"D",a:"Turquia",b:"Paraguai",v:"San Francisco Bay Area Stadium"},
+      {n:32,d:"2026-06-19",s:"Fase de grupos",g:"D",a:"Estados Unidos",b:"Australia",v:"Seattle Stadium"},
+      {n:33,d:"2026-06-20",s:"Fase de grupos",g:"E",a:"Alemanha",b:"Costa do Marfim",v:"Toronto Stadium"},
+      {n:34,d:"2026-06-20",s:"Fase de grupos",g:"E",a:"Equador",b:"Curacao",v:"Kansas City Stadium"},
+      {n:35,d:"2026-06-20",s:"Fase de grupos",g:"F",a:"Paises Baixos",b:"Suecia",v:"Houston Stadium"},
+      {n:36,d:"2026-06-20",s:"Fase de grupos",g:"F",a:"Tunisia",b:"Japao",v:"Estadio Monterrey"},
+      {n:37,d:"2026-06-21",s:"Fase de grupos",g:"H",a:"Uruguai",b:"Cabo Verde",v:"Miami Stadium"},
+      {n:38,d:"2026-06-21",s:"Fase de grupos",g:"H",a:"Espanha",b:"Arabia Saudita",v:"Atlanta Stadium"},
+      {n:39,d:"2026-06-21",s:"Fase de grupos",g:"G",a:"Belgica",b:"Ira",v:"Los Angeles Stadium"},
+      {n:40,d:"2026-06-21",s:"Fase de grupos",g:"G",a:"Nova Zelandia",b:"Egito",v:"BC Place Vancouver"},
+      {n:41,d:"2026-06-22",s:"Fase de grupos",g:"I",a:"Noruega",b:"Senegal",v:"New York New Jersey Stadium"},
+      {n:42,d:"2026-06-22",s:"Fase de grupos",g:"I",a:"Franca",b:"Iraque",v:"Philadelphia Stadium"},
+      {n:43,d:"2026-06-22",s:"Fase de grupos",g:"J",a:"Argentina",b:"Austria",v:"Dallas Stadium"},
+      {n:44,d:"2026-06-22",s:"Fase de grupos",g:"J",a:"Jordania",b:"Argelia",v:"San Francisco Bay Area Stadium"},
+      {n:45,d:"2026-06-23",s:"Fase de grupos",g:"L",a:"Inglaterra",b:"Gana",v:"Boston Stadium"},
+      {n:46,d:"2026-06-23",s:"Fase de grupos",g:"L",a:"Panama",b:"Croacia",v:"Toronto Stadium"},
+      {n:47,d:"2026-06-23",s:"Fase de grupos",g:"K",a:"Portugal",b:"Uzbequistao",v:"Houston Stadium"},
+      {n:48,d:"2026-06-23",s:"Fase de grupos",g:"K",a:"Colombia",b:"RD Congo",v:"Estadio Guadalajara"},
+      {n:49,d:"2026-06-24",s:"Fase de grupos",g:"C",a:"Escocia",b:"Brasil",v:"Miami Stadium"},
+      {n:50,d:"2026-06-24",s:"Fase de grupos",g:"C",a:"Marrocos",b:"Haiti",v:"Atlanta Stadium"},
+      {n:51,d:"2026-06-24",s:"Fase de grupos",g:"B",a:"Suica",b:"Canada",v:"BC Place Vancouver"},
+      {n:52,d:"2026-06-24",s:"Fase de grupos",g:"B",a:"Bosnia e Herzegovina",b:"Catar",v:"Seattle Stadium"},
+      {n:53,d:"2026-06-24",s:"Fase de grupos",g:"A",a:"Tchequia",b:"Mexico",v:"Mexico City Stadium"},
+      {n:54,d:"2026-06-24",s:"Fase de grupos",g:"A",a:"Africa do Sul",b:"Coreia do Sul",v:"Estadio Monterrey"},
+      {n:55,d:"2026-06-25",s:"Fase de grupos",g:"E",a:"Curacao",b:"Costa do Marfim",v:"Philadelphia Stadium"},
+      {n:56,d:"2026-06-25",s:"Fase de grupos",g:"E",a:"Equador",b:"Alemanha",v:"New York New Jersey Stadium"},
+      {n:57,d:"2026-06-25",s:"Fase de grupos",g:"F",a:"Japao",b:"Suecia",v:"Dallas Stadium"},
+      {n:58,d:"2026-06-25",s:"Fase de grupos",g:"F",a:"Tunisia",b:"Paises Baixos",v:"Kansas City Stadium"},
+      {n:59,d:"2026-06-25",s:"Fase de grupos",g:"D",a:"Turquia",b:"Estados Unidos",v:"Los Angeles Stadium"},
+      {n:60,d:"2026-06-25",s:"Fase de grupos",g:"D",a:"Paraguai",b:"Australia",v:"San Francisco Bay Area Stadium"},
+      {n:61,d:"2026-06-26",s:"Fase de grupos",g:"I",a:"Noruega",b:"Franca",v:"Boston Stadium"},
+      {n:62,d:"2026-06-26",s:"Fase de grupos",g:"I",a:"Senegal",b:"Iraque",v:"Toronto Stadium"},
+      {n:63,d:"2026-06-26",s:"Fase de grupos",g:"G",a:"Egito",b:"Ira",v:"Seattle Stadium"},
+      {n:64,d:"2026-06-26",s:"Fase de grupos",g:"G",a:"Nova Zelandia",b:"Belgica",v:"BC Place Vancouver"},
+      {n:65,d:"2026-06-26",s:"Fase de grupos",g:"H",a:"Cabo Verde",b:"Arabia Saudita",v:"Houston Stadium"},
+      {n:66,d:"2026-06-26",s:"Fase de grupos",g:"H",a:"Uruguai",b:"Espanha",v:"Estadio Guadalajara"},
+      {n:67,d:"2026-06-27",s:"Fase de grupos",g:"L",a:"Panama",b:"Inglaterra",v:"New York New Jersey Stadium"},
+      {n:68,d:"2026-06-27",s:"Fase de grupos",g:"L",a:"Croacia",b:"Gana",v:"Philadelphia Stadium"},
+      {n:69,d:"2026-06-27",s:"Fase de grupos",g:"J",a:"Argelia",b:"Austria",v:"Kansas City Stadium"},
+      {n:70,d:"2026-06-27",s:"Fase de grupos",g:"J",a:"Jordania",b:"Argentina",v:"Dallas Stadium"},
+      {n:71,d:"2026-06-27",s:"Fase de grupos",g:"K",a:"Colombia",b:"Portugal",v:"Miami Stadium"},
+      {n:72,d:"2026-06-27",s:"Fase de grupos",g:"K",a:"RD Congo",b:"Uzbequistao",v:"Atlanta Stadium"},
+      {n:73,d:"2026-06-28",s:"Fase de 32",g:"",a:"2o Grupo A",b:"2o Grupo B",v:"Los Angeles Stadium"},
+      {n:74,d:"2026-06-29",s:"Fase de 32",g:"",a:"1o Grupo E",b:"3o Grupo A/B/C/D/F",v:"Boston Stadium"},
+      {n:75,d:"2026-06-29",s:"Fase de 32",g:"",a:"1o Grupo F",b:"2o Grupo C",v:"Estadio Monterrey"},
+      {n:76,d:"2026-06-29",s:"Fase de 32",g:"",a:"1o Grupo C",b:"2o Grupo F",v:"Houston Stadium"},
+      {n:77,d:"2026-06-30",s:"Fase de 32",g:"",a:"1o Grupo I",b:"3o Grupo C/D/F/G/H",v:"New York New Jersey Stadium"},
+      {n:78,d:"2026-06-30",s:"Fase de 32",g:"",a:"2o Grupo E",b:"2o Grupo I",v:"Dallas Stadium"},
+      {n:79,d:"2026-06-30",s:"Fase de 32",g:"",a:"1o Grupo A",b:"3o Grupo C/E/F/H/I",v:"Mexico City Stadium"},
+      {n:80,d:"2026-07-01",s:"Fase de 32",g:"",a:"1o Grupo L",b:"3o Grupo E/H/I/J/K",v:"Atlanta Stadium"},
+      {n:81,d:"2026-07-01",s:"Fase de 32",g:"",a:"1o Grupo D",b:"3o Grupo B/E/F/I/J",v:"San Francisco Bay Area Stadium"},
+      {n:82,d:"2026-07-01",s:"Fase de 32",g:"",a:"1o Grupo G",b:"3o Grupo A/E/H/I/J",v:"Seattle Stadium"},
+      {n:83,d:"2026-07-02",s:"Fase de 32",g:"",a:"2o Grupo K",b:"2o Grupo L",v:"Toronto Stadium"},
+      {n:84,d:"2026-07-02",s:"Fase de 32",g:"",a:"1o Grupo H",b:"2o Grupo J",v:"Los Angeles Stadium"},
+      {n:85,d:"2026-07-02",s:"Fase de 32",g:"",a:"1o Grupo B",b:"3o Grupo E/F/G/I/J",v:"BC Place Vancouver"},
+      {n:86,d:"2026-07-03",s:"Fase de 32",g:"",a:"1o Grupo J",b:"2o Grupo H",v:"Miami Stadium"},
+      {n:87,d:"2026-07-03",s:"Fase de 32",g:"",a:"1o Grupo K",b:"3o Grupo D/E/I/J/L",v:"Kansas City Stadium"},
+      {n:88,d:"2026-07-03",s:"Fase de 32",g:"",a:"2o Grupo D",b:"2o Grupo G",v:"Dallas Stadium"},
+      {n:89,d:"2026-07-04",s:"Oitavas",g:"",a:"Vencedor jogo 74",b:"Vencedor jogo 77",v:"Philadelphia Stadium"},
+      {n:90,d:"2026-07-04",s:"Oitavas",g:"",a:"Vencedor jogo 73",b:"Vencedor jogo 75",v:"Houston Stadium"},
+      {n:91,d:"2026-07-05",s:"Oitavas",g:"",a:"Vencedor jogo 76",b:"Vencedor jogo 78",v:"New York New Jersey Stadium"},
+      {n:92,d:"2026-07-05",s:"Oitavas",g:"",a:"Vencedor jogo 79",b:"Vencedor jogo 80",v:"Mexico City Stadium"},
+      {n:93,d:"2026-07-06",s:"Oitavas",g:"",a:"Vencedor jogo 83",b:"Vencedor jogo 84",v:"Dallas Stadium"},
+      {n:94,d:"2026-07-06",s:"Oitavas",g:"",a:"Vencedor jogo 81",b:"Vencedor jogo 82",v:"Seattle Stadium"},
+      {n:95,d:"2026-07-07",s:"Oitavas",g:"",a:"Vencedor jogo 86",b:"Vencedor jogo 88",v:"Atlanta Stadium"},
+      {n:96,d:"2026-07-07",s:"Oitavas",g:"",a:"Vencedor jogo 85",b:"Vencedor jogo 87",v:"BC Place Vancouver"},
+      {n:97,d:"2026-07-09",s:"Quartas",g:"",a:"Vencedor jogo 89",b:"Vencedor jogo 90",v:"Boston Stadium"},
+      {n:98,d:"2026-07-10",s:"Quartas",g:"",a:"Vencedor jogo 93",b:"Vencedor jogo 94",v:"Los Angeles Stadium"},
+      {n:99,d:"2026-07-11",s:"Quartas",g:"",a:"Vencedor jogo 91",b:"Vencedor jogo 92",v:"Miami Stadium"},
+      {n:100,d:"2026-07-11",s:"Quartas",g:"",a:"Vencedor jogo 95",b:"Vencedor jogo 96",v:"Kansas City Stadium"},
+      {n:101,d:"2026-07-14",s:"Semifinal",g:"",a:"Vencedor jogo 97",b:"Vencedor jogo 98",v:"Dallas Stadium"},
+      {n:102,d:"2026-07-15",s:"Semifinal",g:"",a:"Vencedor jogo 99",b:"Vencedor jogo 100",v:"Atlanta Stadium"},
+      {n:103,d:"2026-07-18",s:"3o lugar",g:"",a:"Perdedor jogo 101",b:"Perdedor jogo 102",v:"Miami Stadium"},
+      {n:104,d:"2026-07-19",s:"Final",g:"",a:"Vencedor jogo 101",b:"Vencedor jogo 102",v:"New York New Jersey Stadium"}
+    ];
+
+    const body = document.querySelector("#matchesBody");
+    const rankingGrid = document.querySelector("#rankingGrid");
+    const comparisonHead = document.querySelector("#comparisonHead");
+    const comparisonBody = document.querySelector("#comparisonBody");
+    const search = document.querySelector("#search");
+    const stageFilter = document.querySelector("#stageFilter");
+    const groupFilter = document.querySelector("#groupFilter");
+    const groupFilterWrap = document.querySelector("#groupFilterWrap");
+    const championPick = document.querySelector("#championPick");
+    const brazilPick = document.querySelector("#brazilPick");
+    const brazilGoalsPick = document.querySelector("#brazilGoalsPick");
+    const saveExtrasBtn = document.querySelector("#saveExtrasBtn");
+    const extrasSummary = document.querySelector("#extrasSummary");
+    const extrasStatus = document.querySelector("#extrasStatus");
+    const loginUser = document.querySelector("#loginUser");
+    const loginPin = document.querySelector("#loginPin");
+    const loginConfirmPin = document.querySelector("#loginConfirmPin");
+    const loginPasswordLabel = document.querySelector("#loginPasswordLabel");
+    const loginConfirmWrap = document.querySelector("#loginConfirmWrap");
+    const loginBtn = document.querySelector("#loginBtn");
+    const loginError = document.querySelector("#loginError");
+    const logoutBtn = document.querySelector("#logoutBtn");
+    const sessionInfo = document.querySelector("#sessionInfo");
+    const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola"];
+    const adminPassword = "9999";
+    const storageKey = "placares-copa-2026-v13";
+    const predictionsKey = "palpites-copa-2026-v13";
+    const extrasKey = "extras-copa-2026-v13";
+    const userPasswordsKey = "senhas-copa-2026-v1";
+    const sessionKey = "sessao-bolao-copa-2026";
+    const useDatabase = true;
+    let scores = {};
+    let predictions = {};
+    let extraPredictions = {};
+    let userPasswords = {};
+    let currentSession = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
+    const dateFmt = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" });
+
+    function firebaseEmailFor(name) {
+      return `${name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, ".").replace(/^\.|\.$/g, "")}@bolaomohr.local`;
+    }
+
+    async function getFirebaseState() {
+      const state = {
+        scores: {},
+        predictions: {},
+        extraPredictions: {},
+        passwordUsers: []
+      };
+
+      const [scoresSnap, predictionsSnap, extrasSnap, usersSnap] = await Promise.all([
+        firestore.collection("official_scores").get(),
+        firestore.collection("predictions").get(),
+        firestore.collection("extra_predictions").get(),
+        firestore.collection("users").get()
+      ]);
+
+      scoresSnap.forEach(doc => {
+        const row = doc.data();
+        state.scores[String(row.match_number ?? doc.id)] = {
+          a: row.a ?? "",
+          b: row.b ?? "",
+          pa: row.pa ?? "",
+          pb: row.pb ?? "",
+          locked: Boolean(row.locked)
+        };
+      });
+
+      predictionsSnap.forEach(doc => {
+        const row = doc.data();
+        const participant = row.participant;
+        if (!participant) return;
+        state.predictions[participant] = state.predictions[participant] || {};
+        state.predictions[participant][String(row.match_number)] = {
+          a: row.a ?? "",
+          b: row.b ?? "",
+          locked: Boolean(row.locked)
+        };
+      });
+
+      extrasSnap.forEach(doc => {
+        const row = doc.data();
+        const participant = row.participant || doc.id;
+        state.extraPredictions[participant] = {
+          champion: row.champion ?? "",
+          brazilPhase: row.brazil_phase ?? row.brazilPhase ?? "",
+          brazilGoals: row.brazil_goals ?? row.brazilGoals ?? "",
+          locked: Boolean(row.locked)
+        };
+      });
+
+      usersSnap.forEach(doc => state.passwordUsers.push(doc.id));
+      return state;
+    }
+
+    async function apiRequest(path, payload) {
+      if (path === "/api/state") {
+        return getFirebaseState();
+      }
+
+      if (path === "/api/login") {
+        const name = String(payload.name || "");
+        const password = String(payload.password || "");
+        const confirmation = String(payload.confirmation || "");
+
+        if (name !== "Administrador" && !participants.includes(name)) throw new Error("Usuario invalido.");
+        if (!password) throw new Error("Digite a senha.");
+
+        const role = name === "Administrador" ? "admin" : "participant";
+        const userRef = firestore.collection("users").doc(name);
+        const email = firebaseEmailFor(name);
+
+        if (confirmation) {
+          if (password !== confirmation) throw new Error("As senhas nao conferem.");
+          try {
+            await auth.createUserWithEmailAndPassword(email, password);
+            await userRef.set({ participant: name, role, createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+            return { ok: true, role, created: true };
+          } catch (error) {
+            if (error.code === "auth/email-already-in-use") {
+              await auth.signInWithEmailAndPassword(email, password);
+              await userRef.set({ participant: name, role, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+              return { ok: true, role };
+            }
+            throw error;
+          }
+        }
+
+        try {
+          await auth.signInWithEmailAndPassword(email, password);
+          await userRef.set({ participant: name, role, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+          return { ok: true, role };
+        } catch (error) {
+          if (error.code === "auth/user-not-found" || error.code === "auth/invalid-credential" || error.code === "auth/invalid-login-credentials") {
+            const createError = new Error("FIRST_ACCESS_CONFIRM_PASSWORD");
+            createError.code = "first-access";
+            throw createError;
+          }
+          throw error;
+        }
+      }
+
+      if (path === "/api/score") {
+        const number = Number(payload.matchNumber);
+        const ref = firestore.collection("official_scores").doc(String(number));
+        const existing = await ref.get();
+        if (existing.exists && existing.data().locked) throw new Error("Resultado oficial ja salvo.");
+        await ref.set({
+          match_number: number,
+          a: String(payload.a ?? ""),
+          b: String(payload.b ?? ""),
+          pa: String(payload.pa ?? ""),
+          pb: String(payload.pb ?? ""),
+          locked: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        return { ok: true, state: await getFirebaseState() };
+      }
+
+      if (path === "/api/prediction") {
+        const participant = String(payload.participant || "");
+        const number = Number(payload.matchNumber);
+        const ref = firestore.collection("predictions").doc(`${participant}_${number}`);
+        const existing = await ref.get();
+        if (existing.exists && existing.data().locked) throw new Error("Palpite ja salvo.");
+        await ref.set({
+          participant,
+          match_number: number,
+          a: String(payload.a ?? ""),
+          b: String(payload.b ?? ""),
+          locked: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return { ok: true, state: await getFirebaseState() };
+      }
+
+      if (path === "/api/extras") {
+        const participant = String(payload.participant || "");
+        const ref = firestore.collection("extra_predictions").doc(participant);
+        const existing = await ref.get();
+        if (existing.exists && existing.data().locked) throw new Error("Apostas extras ja salvas.");
+        await ref.set({
+          participant,
+          champion: String(payload.champion ?? ""),
+          brazil_phase: String(payload.brazilPhase ?? ""),
+          brazil_goals: String(payload.brazilGoals ?? ""),
+          locked: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return { ok: true, state: await getFirebaseState() };
+      }
+
+      throw new Error("Rota nao encontrada.");
+    }
+
+    function applyServerState(state) {
+      scores = state.scores || {};
+      predictions = state.predictions || {};
+      extraPredictions = state.extraPredictions || {};
+      userPasswords = {};
+      (state.passwordUsers || []).forEach(name => {
+        userPasswords[name] = true;
+      });
+    }
+
+    async function loadDatabaseState() {
+      if (!useDatabase) return;
+      try {
+        applyServerState(await apiRequest("/api/state"));
+      } catch (error) {
+        alert(`Nao foi possivel carregar o banco de dados: ${error.message}`);
+      }
+    }
+
+    function fillFilters() {
+      [...new Set(matches.map(match => match.s))].forEach(stage => {
+        stageFilter.add(new Option(stage, stage));
+      });
+
+      [...new Set(matches.map(match => match.g).filter(Boolean))].sort().forEach(group => {
+        groupFilter.add(new Option(`Grupo ${group}`, group));
+      });
+
+      participants.forEach(name => {
+        loginUser.add(new Option(name, name));
+        predictions[name] = predictions[name] || {};
+        extraPredictions[name] = extraPredictions[name] || {};
+      });
+      loginUser.add(new Option("Administrador", "Administrador"));
+
+      [...new Set(matches.flatMap(match => [match.a, match.b]).filter(team => !/Grupo|Vencedor|Perdedor/.test(team)))].sort().forEach(team => {
+        championPick.add(new Option(team, team));
+      });
+    }
+
+    function updateGroupFilterVisibility() {
+      const showGroup = stageFilter.value === "Fase de grupos";
+      groupFilterWrap.hidden = !showGroup;
+      if (!showGroup) groupFilter.value = "";
+    }
+
+    function matchDeadline(match) {
+      if (match.s === "Fase de grupos") {
+        return new Date(2026, 5, 10, 18, 0, 0);
+      }
+
+      const [year, month, day] = match.d.split("-").map(Number);
+      return new Date(year, month - 1, day - 1, 18, 0, 0);
+    }
+
+    function predictionClosed(match) {
+      return new Date() > matchDeadline(match);
+    }
+
+    function extrasClosed() {
+      return new Date() > new Date(2026, 5, 10, 18, 0, 0);
+    }
+
+    function cleanNumber(value) {
+      return value.replace(/\D/g, "");
+    }
+
+    function simulatedResultMatches() {
+      return matches;
+    }
+
+    function simulatedOfficial(matchNumber) {
+      const home = (matchNumber * 7 + 2) % 4;
+      const away = (matchNumber * 5 + 1) % 3;
+      const result = { a: String(home), b: String(away), locked: true };
+
+      if (matchNumber >= 73) {
+        if (home === away) {
+          result.pa = "4";
+          result.pb = "3";
+        } else {
+          result.pa = "";
+          result.pb = "";
+        }
+      }
+
+      return result;
+    }
+
+    function simulatedGuess(matchNumber, participantIndex) {
+      const official = simulatedOfficial(matchNumber);
+      let home = Number(official.a);
+      let away = Number(official.b);
+      const pattern = (matchNumber + participantIndex) % 5;
+
+      if (pattern === 0) {
+        return { a: String(home), b: String(away), locked: true };
+      }
+
+      if (pattern === 1) {
+        home = Math.min(5, home + 1);
+      } else if (pattern === 2) {
+        away = Math.min(5, away + 1);
+      } else if (pattern === 3) {
+        home = Math.max(0, home - 1);
+      } else {
+        away = Math.max(0, away - 1);
+      }
+
+      return { a: String(home), b: String(away), locked: true };
+    }
+
+    function seedTestScores() {
+      let changed = false;
+      simulatedResultMatches().forEach(match => {
+        if (!scores[match.n]) {
+          scores[match.n] = simulatedOfficial(match.n);
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        localStorage.setItem(storageKey, JSON.stringify(scores));
+      }
+    }
+
+    function seedTestPredictions() {
+      let changed = false;
+      participants.forEach((participant, participantIndex) => {
+        matches.forEach(match => {
+          const matchNumber = String(match.n);
+          predictions[participant] = predictions[participant] || {};
+          if (!predictions[participant][matchNumber]) {
+            predictions[participant][matchNumber] = simulatedGuess(match.n, participantIndex);
+            changed = true;
+          }
+        });
+      });
+
+      if (changed) {
+        localStorage.setItem(predictionsKey, JSON.stringify(predictions));
+      }
+    }
+
+    async function saveScore(matchNumber, homeValue, awayValue, penHomeValue = "", penAwayValue = "") {
+      if (useDatabase) {
+        try {
+          const result = await apiRequest("/api/score", {
+            matchNumber,
+            a: homeValue,
+            b: awayValue,
+            pa: penHomeValue,
+            pb: penAwayValue
+          });
+          applyServerState(result.state);
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+        renderExtras();
+        renderRanking();
+        render();
+        return;
+      }
+
+      scores[matchNumber] = scores[matchNumber] || {};
+      scores[matchNumber].a = homeValue;
+      scores[matchNumber].b = awayValue;
+      scores[matchNumber].pa = penHomeValue;
+      scores[matchNumber].pb = penAwayValue;
+      scores[matchNumber].locked = true;
+      localStorage.setItem(storageKey, JSON.stringify(scores));
+      renderExtras();
+      renderRanking();
+      render();
+    }
+
+    async function savePrediction(participant, matchNumber, homeValue, awayValue) {
+      const match = matches.find(item => item.n === matchNumber);
+      if (match && predictionClosed(match)) {
+        alert("O prazo para apostar neste jogo ja encerrou.");
+        return;
+      }
+      if (useDatabase) {
+        try {
+          const result = await apiRequest("/api/prediction", {
+            participant,
+            matchNumber,
+            a: homeValue,
+            b: awayValue
+          });
+          applyServerState(result.state);
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+        renderRanking();
+        render();
+        return;
+      }
+
+      predictions[participant] = predictions[participant] || {};
+      predictions[participant][matchNumber] = predictions[participant][matchNumber] || {};
+      predictions[participant][matchNumber].a = homeValue;
+      predictions[participant][matchNumber].b = awayValue;
+      predictions[participant][matchNumber].locked = true;
+      localStorage.setItem(predictionsKey, JSON.stringify(predictions));
+      renderRanking();
+      render();
+    }
+
+    function outcome(a, b) {
+      if (a > b) return "casa";
+      if (a < b) return "fora";
+      return "empate";
+    }
+
+    function pointsFor(matchNumber, participant) {
+      const official = scores[matchNumber] || {};
+      const guess = predictions[participant]?.[matchNumber] || {};
+      if (official.a === "" || official.b === "" || guess.a === "" || guess.b === "") return "";
+      if ([official.a, official.b, guess.a, guess.b].some(value => value === undefined)) return "";
+
+      const officialA = Number(official.a);
+      const officialB = Number(official.b);
+      const guessA = Number(guess.a);
+      const guessB = Number(guess.b);
+
+      if (officialA === guessA && officialB === guessB) return 3;
+      return outcome(officialA, officialB) === outcome(guessA, guessB) ? 1 : 0;
+    }
+
+    function totalFor(participant) {
+      return matches.reduce((total, match) => {
+        const points = pointsFor(match.n, participant);
+        return total + (points === "" ? 0 : points);
+      }, 0) + extraPointsFor(participant);
+    }
+
+    function officialChampion() {
+      const resolvedTeams = buildResolvedTeams();
+      return matchResult(matches.find(match => match.n === 104), resolvedTeams)?.winner || "";
+    }
+
+    function officialBrazilPhase() {
+      const resolvedTeams = buildResolvedTeams();
+      const finalResult = matchResult(matches.find(match => match.n === 104), resolvedTeams);
+      if (finalResult?.winner === "Brasil") return "Final";
+      if (finalResult?.loser === "Brasil") return "Final";
+
+      const brazilKnockout = matches
+        .filter(match => match.n >= 73)
+        .map(match => ({ match, teams: displayTeams(match, resolvedTeams), result: matchResult(match, resolvedTeams) }))
+        .find(item => (item.teams.a === "Brasil" || item.teams.b === "Brasil") && item.result?.loser === "Brasil");
+
+      if (brazilKnockout) return brazilKnockout.match.s;
+
+      const group = matches.find(match => match.g && (match.a === "Brasil" || match.b === "Brasil"))?.g;
+      if (!group) return "";
+      const table = groupTable(group);
+      if (!table) return "";
+      return table.slice(0, 3).some(item => item.team === "Brasil") ? "" : "Fase de grupos";
+    }
+
+    function normalizeBrazilPhase(phase) {
+      if (phase === "3o lugar") return "Semifinal";
+      return phase === "Campeao" ? "Final" : phase;
+    }
+
+    function officialBrazilOver10Goals() {
+      const resolvedTeams = buildResolvedTeams();
+      let goals = 0;
+      let played = 0;
+
+      matches.forEach(match => {
+        if (!officialComplete(match.n)) return;
+        const teams = displayTeams(match, resolvedTeams);
+        const official = scores[match.n] || {};
+
+        if (teams.a === "Brasil") {
+          goals += Number(official.a);
+          played += 1;
+        } else if (teams.b === "Brasil") {
+          goals += Number(official.b);
+          played += 1;
+        }
+      });
+
+      if (!played) return "";
+      return goals >= 11 ? "Sim" : "Nao";
+    }
+
+    function extraPointsFor(participant) {
+      const extra = extraPredictions[participant] || {};
+      let total = 0;
+      if (extra.champion && extra.champion === officialChampion()) total += 7;
+      if (extra.brazilPhase && normalizeBrazilPhase(extra.brazilPhase) === officialBrazilPhase()) total += 5;
+      if (extra.brazilGoals && extra.brazilGoals === officialBrazilOver10Goals()) total += 3;
+      return total;
+    }
+
+    function seedTestExtras() {
+      const championOptions = Array.from(championPick.options).map(option => option.value).filter(Boolean);
+      const phases = Array.from(brazilPick.options).map(option => option.value).filter(Boolean);
+      let changed = false;
+
+      participants.forEach((participant, index) => {
+        extraPredictions[participant] = extraPredictions[participant] || {};
+        if (!extraPredictions[participant].locked) {
+          extraPredictions[participant] = {
+            champion: championOptions[index % championOptions.length] || "",
+            brazilPhase: phases[index % phases.length] || "",
+            brazilGoals: index % 2 === 0 ? "Sim" : "Nao",
+            locked: true
+          };
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        localStorage.setItem(extrasKey, JSON.stringify(extraPredictions));
+      }
+    }
+
+    async function saveExtras() {
+      if (!currentSession || currentSession.role !== "participant") return;
+      const current = extraPredictions[currentSession.name] || {};
+      if (current.locked) return;
+
+      if (extrasClosed()) {
+        alert("O prazo para salvar as apostas extras ja encerrou.");
+        return;
+      }
+
+      if (!championPick.value || !brazilPick.value || !brazilGoalsPick.value) {
+        alert("Preencha todas as apostas extras antes de salvar.");
+        return;
+      }
+
+      if (confirm("Depois de salvar essas apostas, elas nao poderao ser alteradas. Confirmar?")) {
+        if (useDatabase) {
+          try {
+            const result = await apiRequest("/api/extras", {
+              participant: currentSession.name,
+              champion: championPick.value,
+              brazilPhase: brazilPick.value,
+              brazilGoals: brazilGoalsPick.value
+            });
+            applyServerState(result.state);
+          } catch (error) {
+            alert(error.message);
+            return;
+          }
+          renderExtras();
+          renderRanking();
+          render();
+          return;
+        }
+
+        extraPredictions[currentSession.name] = {
+          champion: championPick.value,
+          brazilPhase: brazilPick.value,
+          brazilGoals: brazilGoalsPick.value,
+          locked: true
+        };
+        localStorage.setItem(extrasKey, JSON.stringify(extraPredictions));
+        renderExtras();
+        renderRanking();
+        render();
+      }
+    }
+
+    function renderExtras() {
+      const champion = officialChampion();
+      const brazilPhase = officialBrazilPhase();
+      const brazilGoals = officialBrazilOver10Goals();
+      const formItems = document.querySelectorAll(".extras-form");
+
+      if (!currentSession) return;
+
+      if (currentSession.role === "admin") {
+        formItems.forEach(item => item.style.display = "none");
+        extrasSummary.style.display = "block";
+        extrasSummary.innerHTML = `<span class="extras-item">Campeao: <span class="extras-value">${champion || "-"}</span></span><span class="extras-item">Fase do Brasil: <span class="extras-value">${brazilPhase || "-"}</span></span><span class="extras-item">Brasil 11+ gols: <span class="extras-value">${brazilGoals || "-"}</span></span>`;
+        extrasStatus.textContent = "";
+        return;
+      }
+
+      const current = extraPredictions[currentSession.name] || {};
+      const closedExtras = extrasClosed();
+      championPick.disabled = Boolean(current.locked) || closedExtras;
+      brazilPick.disabled = Boolean(current.locked) || closedExtras;
+      brazilGoalsPick.disabled = Boolean(current.locked) || closedExtras;
+      championPick.value = current.champion || "";
+      brazilPick.value = normalizeBrazilPhase(current.brazilPhase) || "";
+      brazilGoalsPick.value = current.brazilGoals || "";
+      formItems.forEach(item => item.style.display = current.locked ? "none" : "");
+      saveExtrasBtn.disabled = closedExtras;
+      saveExtrasBtn.textContent = closedExtras ? "Prazo" : "Salvar";
+      saveExtrasBtn.title = closedExtras ? "Prazo encerrado" : "";
+      extrasSummary.style.display = current.locked ? "block" : "none";
+      extrasSummary.innerHTML = current.locked
+        ? `<span class="extras-item">Campeao: <span class="extras-value">${current.champion || "-"}</span> / Resultado: <span class="extras-value">${champion || "-"}</span></span><span class="extras-item">Fase do Brasil: <span class="extras-value">${normalizeBrazilPhase(current.brazilPhase) || "-"}</span> / Resultado: <span class="extras-value">${brazilPhase || "-"}</span></span><span class="extras-item">Brasil 11+ gols: <span class="extras-value">${current.brazilGoals || "-"}</span> / Resultado: <span class="extras-value">${brazilGoals || "-"}</span></span>`
+        : "";
+      extrasStatus.textContent = !current.locked && closedExtras ? "Prazo das apostas extras encerrado." : "";
+    }
+
+    function officialComplete(matchNumber) {
+      const official = scores[matchNumber] || {};
+      return official.a !== undefined && official.a !== "" && official.b !== undefined && official.b !== "";
+    }
+
+    function isKnockout(match) {
+      return match.n >= 73;
+    }
+
+    function penaltyComplete(official) {
+      return official.pa !== undefined && official.pa !== "" && official.pb !== undefined && official.pb !== "" && official.pa !== official.pb;
+    }
+
+    function officialDisplay(official) {
+      if (official.a === undefined || official.a === "" || official.b === undefined || official.b === "") return "-";
+      const normal = `${official.a} x ${official.b}`;
+      if (official.a === official.b && penaltyComplete(official)) {
+        return `${normal} pen. ${official.pa} x ${official.pb}`;
+      }
+      return normal;
+    }
+
+    function groupTable(group) {
+      const groupMatches = matches.filter(match => match.g === group);
+      if (groupMatches.length !== 6 || !groupMatches.every(match => officialComplete(match.n))) return null;
+
+      const table = {};
+      groupMatches.forEach(match => {
+        [match.a, match.b].forEach(team => {
+          table[team] = table[team] || { team, pts: 0, gf: 0, ga: 0, gd: 0 };
+        });
+
+        const official = scores[match.n];
+        const home = Number(official.a);
+        const away = Number(official.b);
+        table[match.a].gf += home;
+        table[match.a].ga += away;
+        table[match.b].gf += away;
+        table[match.b].ga += home;
+
+        if (home > away) {
+          table[match.a].pts += 3;
+        } else if (home < away) {
+          table[match.b].pts += 3;
+        } else {
+          table[match.a].pts += 1;
+          table[match.b].pts += 1;
+        }
+      });
+
+      return Object.values(table)
+        .map(item => ({ ...item, gd: item.gf - item.ga }))
+        .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.team.localeCompare(b.team));
+    }
+
+    function bestThirds() {
+      return "ABCDEFGHIJKL".split("")
+        .map(group => ({ group, team: groupTable(group)?.[2] }))
+        .filter(item => item.team)
+        .sort((a, b) => b.team.pts - a.team.pts || b.team.gd - a.team.gd || b.team.gf - a.team.gf || a.team.team.localeCompare(b.team.team));
+    }
+
+    function buildResolvedTeams() {
+      const usedThirdGroups = new Set();
+      const thirds = bestThirds();
+      const map = {};
+
+      matches.forEach(match => {
+        if (match.n < 73 || match.n > 88) return;
+
+        [match.a, match.b].forEach(slot => {
+          if (map[slot]) return;
+
+          const fixed = slot.match(/^([12])o Grupo ([A-L])$/);
+          if (fixed) {
+            const position = Number(fixed[1]) - 1;
+            const group = fixed[2];
+            const table = groupTable(group);
+            if (table?.[position]) map[slot] = table[position].team;
+            return;
+          }
+
+          const third = slot.match(/^3o Grupo ([A-L/]+)$/);
+          if (third) {
+            const candidates = third[1].split("/");
+            const selected = thirds.find(item => candidates.includes(item.group) && !usedThirdGroups.has(item.group));
+            if (selected) {
+              usedThirdGroups.add(selected.group);
+              map[slot] = selected.team.team;
+            }
+          }
+        });
+      });
+
+      matches.forEach(match => {
+        if (match.n < 89) return;
+
+        [match.a, match.b].forEach(slot => {
+          if (map[slot]) return;
+
+          const resultSlot = slot.match(/^(Vencedor|Perdedor) jogo (\d+)$/);
+          if (!resultSlot) return;
+
+          const sourceMatch = matches.find(item => item.n === Number(resultSlot[2]));
+          const result = sourceMatch ? matchResult(sourceMatch, map) : null;
+          if (!result) return;
+
+          map[slot] = resultSlot[1] === "Vencedor" ? result.winner : result.loser;
+        });
+      });
+
+      return map;
+    }
+
+    function displayTeams(match, resolvedTeams) {
+      return {
+        a: resolvedTeams[match.a] || match.a,
+        b: resolvedTeams[match.b] || match.b
+      };
+    }
+
+    function matchResult(match, resolvedTeams) {
+      const official = scores[match.n] || {};
+      if (!officialComplete(match.n)) return null;
+
+      const teams = displayTeams(match, resolvedTeams);
+      const home = Number(official.a);
+      const away = Number(official.b);
+
+      if (home > away) return { winner: teams.a, loser: teams.b };
+      if (home < away) return { winner: teams.b, loser: teams.a };
+      if (!penaltyComplete(official)) return null;
+
+      return Number(official.pa) > Number(official.pb)
+        ? { winner: teams.a, loser: teams.b }
+        : { winner: teams.b, loser: teams.a };
+    }
+
+    function teamWithOfficial(team, score, position = "right") {
+      if (score === undefined || score === "") return team;
+      if (position === "left") return `<span class="official-inline left">(${score})</span> ${team}`;
+      return `${team} <span class="official-inline">(${score})</span>`;
+    }
+
+    function filteredMatches() {
+      const term = search.value.trim().toLowerCase();
+      const stage = stageFilter.value;
+      const group = groupFilter.value;
+      const resolvedTeams = buildResolvedTeams();
+
+      return matches
+        .filter(match => !stage || match.s === stage)
+        .filter(match => !group || match.g === group)
+        .filter(match => {
+          if (match.n < 73) return true;
+          const teams = displayTeams(match, resolvedTeams);
+          return !/Grupo|Vencedor|Perdedor/.test(teams.a) && !/Grupo|Vencedor|Perdedor/.test(teams.b);
+        })
+        .filter(match => {
+          if (!term) return true;
+          const teams = displayTeams(match, resolvedTeams);
+          return [match.n, match.d, match.s, match.g, teams.a, teams.b].join(" ").toLowerCase().includes(term);
+        });
+    }
+
+    function formatGuess(guess, points) {
+      if (!guess?.locked || guess.a === undefined || guess.b === undefined) return "-";
+      const pointText = points === "" ? "" : `<span class="guess-points">(${points})</span>`;
+      return `${guess.a} x ${guess.b}${pointText}`;
+    }
+
+    function renderComparison(currentMatches) {
+      const resolvedTeams = buildResolvedTeams();
+      const allExtrasComplete = participants.every(name => {
+        const extra = extraPredictions[name] || {};
+        return extra.locked && extra.champion && extra.brazilPhase && extra.brazilGoals;
+      });
+      comparisonHead.innerHTML = `
+        <tr>
+          <th>Partida</th>
+          <th class="guess-cell">Oficial</th>
+          ${participants.map(name => `<th class="guess-cell">${name}</th>`).join("")}
+        </tr>
+      `;
+
+      comparisonBody.innerHTML = "";
+      if (allExtrasComplete) {
+        comparisonBody.insertAdjacentHTML("beforeend", `
+          <tr class="phase-row"><td colspan="10">Apostas extras</td></tr>
+          <tr>
+            <td class="match-cell">Campeao</td>
+            <td class="guess-cell">${officialChampion() || "-"}</td>
+            ${participants.map(name => `<td class="guess-cell">${extraPredictions[name]?.champion || "-"}</td>`).join("")}
+          </tr>
+          <tr>
+            <td class="match-cell">Fase do Brasil</td>
+            <td class="guess-cell">${officialBrazilPhase() || "-"}</td>
+            ${participants.map(name => `<td class="guess-cell">${normalizeBrazilPhase(extraPredictions[name]?.brazilPhase) || "-"}</td>`).join("")}
+          </tr>
+          <tr>
+            <td class="match-cell">Brasil 11+ gols</td>
+            <td class="guess-cell">${officialBrazilOver10Goals() || "-"}</td>
+            ${participants.map(name => `<td class="guess-cell">${extraPredictions[name]?.brazilGoals || "-"}</td>`).join("")}
+          </tr>
+        `);
+      }
+
+      const completeMatches = currentMatches.filter(match => {
+        return participants.every(name => {
+          const guess = predictions[name]?.[match.n] || {};
+          return guess.locked && guess.a !== undefined && guess.a !== "" && guess.b !== undefined && guess.b !== "";
+        });
+      });
+
+      if (!completeMatches.length) {
+        return;
+      }
+
+      let comparisonPhase = "";
+      completeMatches.forEach(match => {
+        if (match.s !== comparisonPhase) {
+          comparisonPhase = match.s;
+          comparisonBody.insertAdjacentHTML("beforeend", `<tr class="phase-row"><td colspan="10">${comparisonPhase}</td></tr>`);
+        }
+
+        const teams = displayTeams(match, resolvedTeams);
+        const official = scores[match.n] || {};
+        const officialText = officialDisplay(official);
+        const comparisonMatch = `${teamWithOfficial(teams.a, official.a)} x ${teamWithOfficial(teams.b, official.b)}`;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="match-cell">${comparisonMatch}</td>
+          <td class="guess-cell">${officialText}</td>
+          ${participants.map(name => {
+            const guess = predictions[name]?.[match.n] || {};
+            return `<td class="guess-cell">${formatGuess(guess, pointsFor(match.n, name))}</td>`;
+          }).join("")}
+        `;
+        comparisonBody.append(row);
+      });
+    }
+
+    function renderRanking() {
+      const hasOfficialScore = matches.some(match => {
+        const official = scores[match.n] || {};
+        return official.a !== undefined && official.a !== "" && official.b !== undefined && official.b !== "";
+      });
+
+      rankingGrid.innerHTML = "";
+      const ranking = participants
+        .map((name, order) => ({ name: hasOfficialScore ? name : "-", score: totalFor(name), order }))
+        .sort((a, b) => b.score - a.score || a.order - b.order);
+
+      if (!ranking.length) {
+        rankingGrid.innerHTML = '<div class="rank-card"><div class="rank-score">-</div></div>';
+        return;
+      }
+
+      ranking.forEach((item, index) => {
+        const card = document.createElement("div");
+        const podium = ["gold", "silver", "bronze"][index] || "";
+        const place = podium ? `<span class="medal ${podium}">${index + 1}</span>` : `${index + 1}º Lugar`;
+        card.className = `rank-card ${podium}`.trim();
+        card.innerHTML = `
+          <div class="rank-place">${place}</div>
+          <div class="rank-name">${item.name}</div>
+          <div class="rank-score">${item.score} pts</div>
+        `;
+        rankingGrid.append(card);
+      });
+    }
+
+    function render() {
+      const participant = currentSession?.role === "participant" ? currentSession.name : participants[0];
+      const isAdmin = currentSession?.role === "admin";
+      const guessDisabled = isAdmin ? " disabled" : "";
+      const currentMatches = filteredMatches();
+      const resolvedTeams = buildResolvedTeams();
+
+      body.innerHTML = "";
+      let currentPhase = "";
+      currentMatches.forEach(match => {
+          if (match.s !== currentPhase) {
+            currentPhase = match.s;
+            body.insertAdjacentHTML("beforeend", `<tr class="phase-row"><td colspan="15">${currentPhase}</td></tr>`);
+          }
+
+          const teams = displayTeams(match, resolvedTeams);
+          const row = document.createElement("tr");
+          const current = scores[match.n] || {};
+          const guess = predictions[participant]?.[match.n] || {};
+          const points = pointsFor(match.n, participant);
+          if (!isAdmin && points === 3) {
+            row.classList.add("exact-row");
+          } else if (!isAdmin && points === 1) {
+            row.classList.add("hit-row");
+          }
+          const officialLocked = Boolean(current.locked);
+          const closedByDeadline = predictionClosed(match);
+          const isLocked = Boolean(guess.locked);
+          const officialLock = !isAdmin || officialLocked ? " disabled" : "";
+          const guessLock = guessDisabled || isLocked || closedByDeadline ? " disabled" : "";
+          const penaltyCellA = isKnockout(match)
+            ? `<input class="pen-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Penaltis de ${teams.a} no jogo ${match.n}" value="${current.pa || ""}"${officialLock}>`
+            : "-";
+          const penaltyCellB = isKnockout(match)
+            ? `<input class="pen-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Penaltis de ${teams.b} no jogo ${match.n}" value="${current.pb || ""}"${officialLock}>`
+            : "-";
+          const teamA = isAdmin ? teams.a : teamWithOfficial(teams.a, current.a);
+          const teamB = isAdmin ? teams.b : teamWithOfficial(teams.b, current.b, "left");
+          const officialSaveCell = officialLocked
+            ? '<span class="saved-badge">Salvo</span>'
+            : '<button class="save-official" type="button">Salvar</button>';
+          const saveCell = isLocked
+            ? '<span class="saved-badge">Salvo</span>'
+            : closedByDeadline
+                ? '<span class="saved-badge" title="Prazo encerrado">Prazo</span>'
+            : '<button class="save-prediction" type="button">Salvar</button>';
+          row.innerHTML = `
+            <td class="num">${match.n}</td>
+            <td class="date">${dateFmt.format(new Date(`${match.d}T00:00:00Z`))}</td>
+            <td class="stage">${match.s}</td>
+            <td class="group">${match.g || "-"}</td>
+            <td class="team">${teamA}</td>
+            <td class="score admin-only"><input class="official-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Placar de ${teams.a} no jogo ${match.n}" value="${current.a || ""}"${officialLock}></td>
+            <td class="score admin-only"><input class="official-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Placar de ${teams.b} no jogo ${match.n}" value="${current.b || ""}"${officialLock}></td>
+            <td class="score admin-only">${penaltyCellA}</td>
+            <td class="score admin-only">${penaltyCellB}</td>
+            <td class="score participant-only"><input class="guess-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Palpite de ${participant} para ${teams.a} no jogo ${match.n}" value="${guess.a || ""}"${guessLock}></td>
+            <td class="score participant-only"><input class="guess-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Palpite de ${participant} para ${teams.b} no jogo ${match.n}" value="${guess.b || ""}"${guessLock}></td>
+            <td class="team">${teamB}</td>
+            <td class="save-col admin-save">${officialSaveCell}</td>
+            <td class="points participant-only">${points === "" ? "-" : points}</td>
+            <td class="save-col participant-save">${saveCell}</td>
+          `;
+
+          const scoreA = row.querySelector(".official-a");
+          const scoreB = row.querySelector(".official-b");
+          const penA = row.querySelector(".pen-a");
+          const penB = row.querySelector(".pen-b");
+          const guessA = row.querySelector(".guess-a");
+          const guessB = row.querySelector(".guess-b");
+          const officialButton = row.querySelector(".save-official");
+          if (officialButton) {
+            officialButton.addEventListener("click", () => {
+              const homeValue = cleanNumber(scoreA.value);
+              const awayValue = cleanNumber(scoreB.value);
+              const penHomeValue = penA ? cleanNumber(penA.value) : "";
+              const penAwayValue = penB ? cleanNumber(penB.value) : "";
+              scoreA.value = homeValue;
+              scoreB.value = awayValue;
+              if (penA) penA.value = penHomeValue;
+              if (penB) penB.value = penAwayValue;
+
+              if (homeValue === "" || awayValue === "") {
+                alert("Digite os dois placares oficiais antes de salvar.");
+                return;
+              }
+
+              if (isKnockout(match) && homeValue === awayValue) {
+                if (penHomeValue === "" || penAwayValue === "") {
+                  alert("Jogo empatado no mata-mata: preencha os penaltis para definir o classificado.");
+                  return;
+                }
+
+                if (penHomeValue === penAwayValue) {
+                  alert("Os penaltis nao podem terminar empatados.");
+                  return;
+                }
+              }
+
+              if (confirm("Depois de salvar este resultado oficial, ele nao podera ser alterado. Confirmar?")) {
+                saveScore(match.n, homeValue, awayValue, penHomeValue, penAwayValue);
+              }
+            });
+          }
+
+          const saveButton = row.querySelector(".save-prediction");
+          if (saveButton) {
+            saveButton.addEventListener("click", () => {
+              const homeValue = cleanNumber(guessA.value);
+              const awayValue = cleanNumber(guessB.value);
+              guessA.value = homeValue;
+              guessB.value = awayValue;
+
+              if (homeValue === "" || awayValue === "") {
+                alert("Digite os dois placares antes de salvar.");
+                return;
+              }
+
+              if (confirm("Depois de salvar este palpite, ele nao podera ser alterado. Confirmar?")) {
+                savePrediction(participant, match.n, homeValue, awayValue);
+              }
+            });
+          }
+          body.append(row);
+        });
+
+      renderComparison(currentMatches);
+    }
+
+    function applySession() {
+      if (!currentSession) {
+        document.body.classList.remove("logged-in");
+        document.body.classList.remove("admin-mode");
+        document.body.classList.remove("participant-mode");
+        loginPin.value = "";
+        loginConfirmPin.value = "";
+        updateLoginMode();
+        return;
+      }
+
+      document.body.classList.add("logged-in");
+      document.body.classList.toggle("admin-mode", currentSession.role === "admin");
+      document.body.classList.toggle("participant-mode", currentSession.role !== "admin");
+      sessionInfo.textContent = currentSession.role === "admin"
+        ? "ADMINISTRADOR"
+        : currentSession.name.toUpperCase();
+
+      renderExtras();
+      renderRanking();
+      render();
+    }
+
+    function updateLoginMode() {
+      const name = loginUser.value;
+      const isAdminLogin = name === "Administrador";
+      if (useDatabase) {
+        loginPasswordLabel.textContent = isAdminLogin ? "Senha do administrador" : "Senha";
+        loginPin.placeholder = isAdminLogin ? "Digite a senha do admin" : "Digite sua senha";
+        loginConfirmWrap.hidden = true;
+        loginBtn.textContent = "Entrar";
+        loginError.textContent = "";
+        return;
+      }
+      const needsPasswordCreation = !isAdminLogin && !userPasswords[name];
+      loginPasswordLabel.textContent = isAdminLogin ? "Senha do administrador" : "Senha";
+      loginPin.placeholder = isAdminLogin ? "Digite a senha do admin" : "Digite sua senha";
+      loginConfirmWrap.hidden = !needsPasswordCreation;
+      loginBtn.textContent = needsPasswordCreation ? "Criar e entrar" : "Entrar";
+      loginError.textContent = "";
+    }
+
+    async function login() {
+      const name = loginUser.value;
+      const password = loginPin.value.trim();
+      const confirmation = loginConfirmPin.value.trim();
+
+      if (!password) {
+        loginError.textContent = "Digite a senha.";
+        return;
+      }
+
+      if (useDatabase) {
+        try {
+          const result = await apiRequest("/api/login", { name, password, confirmation });
+          if (result.created) {
+            userPasswords[name] = true;
+          }
+          await loadDatabaseState();
+        } catch (error) {
+          if (error.code === "first-access") {
+            loginConfirmWrap.hidden = false;
+            loginBtn.textContent = "Criar e entrar";
+            loginError.textContent = "Primeiro acesso: confirme a senha para criar seu login.";
+            loginConfirmPin.focus();
+            return;
+          }
+          if (error.code === "auth/weak-password") {
+            loginError.textContent = "Use uma senha com pelo menos 6 caracteres.";
+            return;
+          }
+          if (error.code === "auth/email-already-in-use" || error.code === "auth/wrong-password" || error.code === "auth/invalid-credential" || error.code === "auth/invalid-login-credentials") {
+            loginError.textContent = "Senha incorreta.";
+            return;
+          }
+          loginError.textContent = error.message || "Nao foi possivel entrar.";
+          return;
+        }
+        currentSession = { name, role: name === "Administrador" ? "admin" : "participant" };
+        sessionStorage.setItem(sessionKey, JSON.stringify(currentSession));
+        loginError.textContent = "";
+        loginPin.value = "";
+        loginConfirmPin.value = "";
+        applySession();
+        return;
+      }
+
+      if (name === "Administrador") {
+        if (password !== adminPassword) {
+          loginError.textContent = "Senha incorreta.";
+          return;
+        }
+      } else if (!userPasswords[name]) {
+        if (!confirmation) {
+          loginError.textContent = "Confirme a senha.";
+          return;
+        }
+        if (password !== confirmation) {
+          loginError.textContent = "As senhas nao conferem.";
+          return;
+        }
+        userPasswords[name] = password;
+        localStorage.setItem(userPasswordsKey, JSON.stringify(userPasswords));
+      } else if (userPasswords[name] !== password) {
+        loginError.textContent = "Senha incorreta.";
+        return;
+      }
+
+      currentSession = { name, role: name === "Administrador" ? "admin" : "participant" };
+      sessionStorage.setItem(sessionKey, JSON.stringify(currentSession));
+      loginError.textContent = "";
+      loginPin.value = "";
+      loginConfirmPin.value = "";
+      applySession();
+    }
+
+    async function logout() {
+      currentSession = null;
+      sessionStorage.removeItem(sessionKey);
+      try { await auth.signOut(); } catch (error) {}
+      applySession();
+    }
+
+    search.addEventListener("input", render);
+    stageFilter.addEventListener("change", () => {
+      updateGroupFilterVisibility();
+      render();
+    });
+    groupFilter.addEventListener("change", render);
+    saveExtrasBtn.addEventListener("click", saveExtras);
+    loginUser.addEventListener("change", () => {
+      loginPin.value = "";
+      loginConfirmPin.value = "";
+      updateLoginMode();
+    });
+    loginBtn.addEventListener("click", login);
+    loginPin.addEventListener("keydown", event => {
+      if (event.key === "Enter") login();
+    });
+    loginConfirmPin.addEventListener("keydown", event => {
+      if (event.key === "Enter") login();
+    });
+    logoutBtn.addEventListener("click", logout);
+    function waitForAuthReady() {
+      return new Promise(resolve => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+          unsubscribe();
+          resolve(user);
+        });
+      });
+    }
+
+    async function startApp() {
+      fillFilters();
+      updateGroupFilterVisibility();
+      const user = await waitForAuthReady();
+
+      if (useDatabase && user && currentSession) {
+        await loadDatabaseState();
+      } else if (useDatabase) {
+        currentSession = null;
+        sessionStorage.removeItem(sessionKey);
+      }
+
+      applySession();
+    }
+
+    startApp();
+  </script>
+</body>
+</html>

@@ -136,9 +136,20 @@
     }
 
     .table-shell {
-      overflow-x: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border: 1px solid var(--line);
       background: var(--panel);
+    }
+
+    .table-shell::after {
+      content: "Arraste para o lado para ver toda a tabela";
+      display: none;
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      background: #fbfcf8;
+      border-top: 1px solid var(--line);
     }
 
     .ranking {
@@ -599,6 +610,202 @@
 
       header {
         padding-top: 20px;
+      }
+    }
+
+
+    /* Ajustes responsivos para celular */
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(100% - 18px, 1240px);
+      }
+
+      header {
+        padding: 16px 10px 14px;
+      }
+
+      h1,
+      body.logged-in h1 {
+        font-size: 20px;
+        line-height: 1.15;
+      }
+
+      .sub {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .login-panel {
+        max-width: none;
+        margin: 12px 0;
+        padding: 14px;
+      }
+
+      .login-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .login-actions button,
+      .extras button,
+      .session-bar button,
+      button.primary {
+        width: 100%;
+      }
+
+      input,
+      select,
+      button {
+        width: 100%;
+        min-height: 42px;
+        font-size: 16px;
+      }
+
+      .ranking {
+        padding: 10px;
+        margin: 8px 0 10px;
+      }
+
+      .ranking h2,
+      .extras h2,
+      .comparison h2 {
+        font-size: 18px;
+      }
+
+      .ranking-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .rank-card {
+        min-height: 62px;
+        padding: 8px;
+      }
+
+      .rank-score {
+        font-size: 18px;
+      }
+
+      .extras {
+        padding: 10px;
+        gap: 8px;
+      }
+
+      .extras-summary {
+        white-space: normal;
+      }
+
+      .extras-item {
+        display: block;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 7px 0;
+      }
+
+      .extras-item:last-child {
+        border-bottom: 0;
+      }
+
+      .toolbar {
+        gap: 8px;
+      }
+
+      .table-shell {
+        border-radius: 6px;
+      }
+
+      .table-shell::after {
+        display: block;
+      }
+
+      table {
+        min-width: 820px;
+        font-size: 12px;
+      }
+
+      .comparison table {
+        min-width: 1040px;
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 6px 4px;
+      }
+
+      .num {
+        width: 42px;
+      }
+
+      .date {
+        width: 78px;
+      }
+
+      .stage {
+        width: 96px;
+      }
+
+      .team {
+        width: 130px;
+      }
+
+      .score {
+        width: 48px;
+      }
+
+      .score input {
+        width: 38px;
+        min-height: 34px;
+        font-size: 16px;
+        padding: 4px;
+      }
+
+      .save-col {
+        width: 74px;
+      }
+
+      .save-col button {
+        min-height: 34px;
+        font-size: 12px;
+        padding: 4px 6px;
+      }
+
+      .saved-badge {
+        padding: 5px 6px;
+        font-size: 11px;
+      }
+
+      .session-bar {
+        display: none;
+        width: 100%;
+        justify-content: stretch;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      body.logged-in .session-bar {
+        display: flex;
+      }
+
+      .header-grid {
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .ranking-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1,
+      body.logged-in h1 {
+        font-size: 18px;
+      }
+
+      .wrap {
+        width: min(100% - 12px, 1240px);
       }
     }
 

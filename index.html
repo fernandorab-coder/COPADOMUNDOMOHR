@@ -2126,6 +2126,14 @@
     function updateLoginMode() {
       const name = loginUser.value;
       const isAdminLogin = name === "Administrador";
+      if (useDatabase) {
+        loginPasswordLabel.textContent = isAdminLogin ? "Senha do administrador" : "Senha";
+        loginPin.placeholder = isAdminLogin ? "Digite a senha do admin" : "Digite sua senha";
+        loginConfirmWrap.hidden = true;
+        loginBtn.textContent = "Entrar";
+        loginError.textContent = "";
+        return;
+      }
       const needsPasswordCreation = !isAdminLogin && !userPasswords[name];
       loginPasswordLabel.textContent = isAdminLogin ? "Senha do administrador" : "Senha";
       loginPin.placeholder = isAdminLogin ? "Digite a senha do admin" : "Digite sua senha";
@@ -2146,12 +2154,11 @@
 
       if (useDatabase) {
         try {
-          const result = await apiRequest("/api/login", { name, password, confirmation });
-          if (result.created) {
-            userPasswords[name] = true;
-          }
+          const email = firebaseEmailFor(name);
+          await auth.signInWithEmailAndPassword(email, password);
+          await loadDatabaseState();
         } catch (error) {
-          loginError.textContent = error.message;
+          loginError.textContent = "Usuario ou senha incorretos.";
           return;
         }
         currentSession = { name, role: name === "Administrador" ? "admin" : "participant" };
@@ -2219,10 +2226,27 @@
       if (event.key === "Enter") login();
     });
     logoutBtn.addEventListener("click", logout);
+    function waitForAuthReady() {
+      return new Promise(resolve => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+          unsubscribe();
+          resolve(user);
+        });
+      });
+    }
+
     async function startApp() {
-      await loadDatabaseState();
       fillFilters();
       updateGroupFilterVisibility();
+      const user = await waitForAuthReady();
+
+      if (useDatabase && user && currentSession) {
+        await loadDatabaseState();
+      } else if (useDatabase) {
+        currentSession = null;
+        sessionStorage.removeItem(sessionKey);
+      }
+
       applySession();
     }
 

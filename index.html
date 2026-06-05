@@ -778,7 +778,24 @@
     </div>
   </main>
 
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJYKei1859HKLMywP-Z_1XG4kWf2IMaxg",
+      authDomain: "bolaomohr.firebaseapp.com",
+      projectId: "bolaomohr",
+      storageBucket: "bolaomohr.firebasestorage.app",
+      messagingSenderId: "597521933125",
+      appId: "1:597521933125:web:fcc0aa9465d2a4caac142c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+
     const matches = [
       {n:1,d:"2026-06-11",s:"Fase de grupos",g:"A",a:"Mexico",b:"Africa do Sul",v:"Mexico City Stadium"},
       {n:2,d:"2026-06-11",s:"Fase de grupos",g:"A",a:"Coreia do Sul",b:"Tchequia",v:"Estadio Guadalajara"},
@@ -916,23 +933,156 @@
     const extrasKey = "extras-copa-2026-v13";
     const userPasswordsKey = "senhas-copa-2026-v1";
     const sessionKey = "sessao-bolao-copa-2026";
-    const useDatabase = location.protocol === "http:" || location.protocol === "https:";
-    let scores = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    let predictions = JSON.parse(localStorage.getItem(predictionsKey) || "{}");
-    let extraPredictions = JSON.parse(localStorage.getItem(extrasKey) || "{}");
-    let userPasswords = JSON.parse(localStorage.getItem(userPasswordsKey) || "{}");
+    const useDatabase = true;
+    let scores = {};
+    let predictions = {};
+    let extraPredictions = {};
+    let userPasswords = {};
     let currentSession = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
     const dateFmt = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" });
 
-    async function apiRequest(path, payload) {
-      const response = await fetch(path, {
-        method: payload === undefined ? "GET" : "POST",
-        headers: payload === undefined ? {} : { "Content-Type": "application/json" },
-        body: payload === undefined ? undefined : JSON.stringify(payload)
+    function firebaseEmailFor(name) {
+      return `${name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, ".").replace(/^\.|\.$/g, "")}@bolaomohr.local`;
+    }
+
+    async function getFirebaseState() {
+      const state = {
+        scores: {},
+        predictions: {},
+        extraPredictions: {},
+        passwordUsers: []
+      };
+
+      const [scoresSnap, predictionsSnap, extrasSnap, usersSnap] = await Promise.all([
+        firestore.collection("official_scores").get(),
+        firestore.collection("predictions").get(),
+        firestore.collection("extra_predictions").get(),
+        firestore.collection("users").get()
+      ]);
+
+      scoresSnap.forEach(doc => {
+        const row = doc.data();
+        state.scores[String(row.match_number ?? doc.id)] = {
+          a: row.a ?? "",
+          b: row.b ?? "",
+          pa: row.pa ?? "",
+          pb: row.pb ?? "",
+          locked: Boolean(row.locked)
+        };
       });
-      const data = await response.json();
-      if (!response.ok || data.ok === false) throw new Error(data.error || "Erro ao acessar o banco de dados.");
-      return data;
+
+      predictionsSnap.forEach(doc => {
+        const row = doc.data();
+        const participant = row.participant;
+        if (!participant) return;
+        state.predictions[participant] = state.predictions[participant] || {};
+        state.predictions[participant][String(row.match_number)] = {
+          a: row.a ?? "",
+          b: row.b ?? "",
+          locked: Boolean(row.locked)
+        };
+      });
+
+      extrasSnap.forEach(doc => {
+        const row = doc.data();
+        const participant = row.participant || doc.id;
+        state.extraPredictions[participant] = {
+          champion: row.champion ?? "",
+          brazilPhase: row.brazil_phase ?? row.brazilPhase ?? "",
+          brazilGoals: row.brazil_goals ?? row.brazilGoals ?? "",
+          locked: Boolean(row.locked)
+        };
+      });
+
+      usersSnap.forEach(doc => state.passwordUsers.push(doc.id));
+      return state;
+    }
+
+    async function apiRequest(path, payload) {
+      if (path === "/api/state") {
+        return getFirebaseState();
+      }
+
+      if (path === "/api/login") {
+        const name = String(payload.name || "");
+        const password = String(payload.password || "");
+        const confirmation = String(payload.confirmation || "");
+
+        if (name === "Administrador") {
+          if (password !== adminPassword) throw new Error("Senha incorreta.");
+          return { ok: true, role: "admin" };
+        }
+
+        if (!participants.includes(name)) throw new Error("Usuario invalido.");
+        if (!password) throw new Error("Digite a senha.");
+
+        const userRef = firestore.collection("users").doc(name);
+        const userDoc = await userRef.get();
+        const email = firebaseEmailFor(name);
+
+        if (!userDoc.exists) {
+          if (!confirmation) throw new Error("Confirme a senha.");
+          if (password !== confirmation) throw new Error("As senhas nao conferem.");
+          await auth.createUserWithEmailAndPassword(email, password);
+          await userRef.set({ participant: name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+          return { ok: true, role: "participant", created: true };
+        }
+
+        await auth.signInWithEmailAndPassword(email, password);
+        return { ok: true, role: "participant" };
+      }
+
+      if (path === "/api/score") {
+        const number = Number(payload.matchNumber);
+        const ref = firestore.collection("official_scores").doc(String(number));
+        const existing = await ref.get();
+        if (existing.exists && existing.data().locked) throw new Error("Resultado oficial ja salvo.");
+        await ref.set({
+          match_number: number,
+          a: String(payload.a ?? ""),
+          b: String(payload.b ?? ""),
+          pa: String(payload.pa ?? ""),
+          pb: String(payload.pb ?? ""),
+          locked: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        return { ok: true, state: await getFirebaseState() };
+      }
+
+      if (path === "/api/prediction") {
+        const participant = String(payload.participant || "");
+        const number = Number(payload.matchNumber);
+        const ref = firestore.collection("predictions").doc(`${participant}_${number}`);
+        const existing = await ref.get();
+        if (existing.exists && existing.data().locked) throw new Error("Palpite ja salvo.");
+        await ref.set({
+          participant,
+          match_number: number,
+          a: String(payload.a ?? ""),
+          b: String(payload.b ?? ""),
+          locked: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return { ok: true, state: await getFirebaseState() };
+      }
+
+      if (path === "/api/extras") {
+        const participant = String(payload.participant || "");
+        const ref = firestore.collection("extra_predictions").doc(participant);
+        const existing = await ref.get();
+        if (existing.exists && existing.data().locked) throw new Error("Apostas extras ja salvas.");
+        await ref.set({
+          participant,
+          champion: String(payload.champion ?? ""),
+          brazil_phase: String(payload.brazilPhase ?? ""),
+          brazil_goals: String(payload.brazilGoals ?? ""),
+          locked: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return { ok: true, state: await getFirebaseState() };
+      }
+
+      throw new Error("Rota nao encontrada.");
     }
 
     function applyServerState(state) {
@@ -1835,9 +1985,10 @@
       applySession();
     }
 
-    function logout() {
+    async function logout() {
       currentSession = null;
       sessionStorage.removeItem(sessionKey);
+      try { await auth.signOut(); } catch (error) {}
       applySession();
     }
 

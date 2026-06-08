@@ -854,7 +854,8 @@
             • Acertar a fase em que o Brasil encerra sua participação: 5 pontos<br>
             • Acertar se o Brasil fará 11 ou mais gols: 3 pontos<br>
             • Acertar o placar exato dos jogos: 3 pontos<br>
-            • Acertar vitória, derrota ou empate: 1 ponto<br>
+            • Acertar empate sem placar exato: 2 pontos<br>
+            • Acertar vitória sem placar exato: 1 ponto<br>
             <span class="rules-divider"></span>
             *Prazo para apostar na fase de grupos e apostas extras: 10/06/2026 às 18h00<br>
             *Prazo para apostar no mata-mata: 1 dia antes do jogo até 18h00<br>
@@ -1555,7 +1556,10 @@
       const guessB = Number(guess.b);
 
       if (officialA === guessA && officialB === guessB) return 3;
-      return outcome(officialA, officialB) === outcome(guessA, guessB) ? 1 : 0;
+      const officialOutcome = outcome(officialA, officialB);
+      const guessOutcome = outcome(guessA, guessB);
+      if (officialOutcome !== guessOutcome) return 0;
+      return officialOutcome === "empate" ? 2 : 1;
     }
 
     function totalFor(participant) {
@@ -2027,7 +2031,7 @@
           const points = pointsFor(match.n, participant);
           if (!isAdmin && points === 3) {
             row.classList.add("exact-row");
-          } else if (!isAdmin && points === 1) {
+          } else if (!isAdmin && points > 0) {
             row.classList.add("hit-row");
           }
           const officialLocked = Boolean(current.locked);

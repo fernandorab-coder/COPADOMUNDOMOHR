@@ -47,6 +47,10 @@
     }
 
     h1 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       margin: 0 0 8px;
       font-size: clamp(24px, 4vw, 38px);
       letter-spacing: 0;
@@ -54,6 +58,19 @@
 
     body.logged-in h1 {
       font-size: clamp(14px, 2.4vw, 23px);
+    }
+
+    .brand-logo {
+      display: inline-block;
+      width: min(220px, 44vw);
+      max-height: 58px;
+      object-fit: contain;
+      vertical-align: middle;
+    }
+
+    body.logged-in .brand-logo {
+      width: min(150px, 34vw);
+      max-height: 42px;
     }
 
     .sub {
@@ -847,7 +864,7 @@
     <div class="wrap">
       <div class="header-grid">
         <div class="header-copy">
-          <h1>Copa do Mundo 2026 | Mohr Print</h1>
+          <h1>Copa do Mundo 2026 | <img class="brand-logo" src="logo.png" alt="Mohr Print"></h1>
           <p class="sub">
             Regulamento das apostas:<br>
             <span class="rules-spacer"></span>

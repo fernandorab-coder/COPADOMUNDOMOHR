@@ -1,0 +1,101 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null && request.auth.token.email is string;
+    }
+
+    function email() {
+      return request.auth.token.email;
+    }
+
+    function isAdmin() {
+      return signedIn() && email() == "administrador@bolaomohr.local";
+    }
+
+    function isAllowedUser() {
+      return signedIn() && email() in [
+        "ana.paula@bolaomohr.local",
+        "amilton@bolaomohr.local",
+        "neto@bolaomohr.local",
+        "diego@bolaomohr.local",
+        "murilo@bolaomohr.local",
+        "charles@bolaomohr.local",
+        "fernando@bolaomohr.local",
+        "cebola@bolaomohr.local",
+        "administrador@bolaomohr.local"
+      ];
+    }
+
+    function isOwnParticipant(name) {
+      return
+        (email() == "ana.paula@bolaomohr.local" && name == "Ana Paula") ||
+        (email() == "amilton@bolaomohr.local" && name == "Amilton") ||
+        (email() == "neto@bolaomohr.local" && name == "Neto") ||
+        (email() == "diego@bolaomohr.local" && name == "Diego") ||
+        (email() == "murilo@bolaomohr.local" && name == "Murilo") ||
+        (email() == "charles@bolaomohr.local" && name == "Charles") ||
+        (email() == "fernando@bolaomohr.local" && name == "Fernando") ||
+        (email() == "cebola@bolaomohr.local" && name == "Cebola");
+    }
+
+    function isOwnUserDoc(name) {
+      return isOwnParticipant(name) ||
+        (isAdmin() && name == "Administrador");
+    }
+
+    function notLockedYet() {
+      return !("locked" in resource.data) || resource.data.locked != true;
+    }
+
+    match /users/{name} {
+      allow read: if isAllowedUser();
+      allow create, update: if isAllowedUser()
+        && isOwnUserDoc(name)
+        && request.resource.data.participant == name
+        && request.resource.data.role in ["participant", "admin"];
+      allow delete: if false;
+    }
+
+    match /official_scores/{matchId} {
+      allow read: if isAllowedUser();
+      allow create: if isAdmin()
+        && request.resource.data.locked == true;
+      allow update: if isAdmin()
+        && notLockedYet()
+        && request.resource.data.locked == true;
+      allow delete: if false;
+    }
+
+    match /predictions/{predictionId} {
+      allow read: if isAllowedUser();
+      allow create: if isAllowedUser()
+        && isOwnParticipant(request.resource.data.participant)
+        && request.resource.data.locked == true;
+      allow update: if isAllowedUser()
+        && isOwnParticipant(request.resource.data.participant)
+        && notLockedYet()
+        && request.resource.data.locked == true;
+      allow delete: if false;
+    }
+
+    match /extra_predictions/{participant} {
+      allow read: if isAllowedUser();
+      allow create: if isAllowedUser()
+        && isOwnParticipant(participant)
+        && request.resource.data.participant == participant
+        && request.resource.data.locked == true;
+      allow update: if isAllowedUser()
+        && isOwnParticipant(participant)
+        && request.resource.data.participant == participant
+        && notLockedYet()
+        && request.resource.data.locked == true;
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

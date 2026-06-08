@@ -1152,9 +1152,18 @@
       return `${name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, ".").replace(/^\.|\.$/g, "")}@bolaomohr.local`;
     }
 
-    async function loginAlreadyCreated(name) {
-      const userDoc = await firestore.collection("users").doc(name).get();
-      return userDoc.exists;
+    async function firebaseLoginExists(email, password) {
+      try {
+        const credential = await auth.createUserWithEmailAndPassword(email, password);
+        await credential.user.delete();
+        await auth.signOut();
+        return false;
+      } catch (error) {
+        if (error.code === "auth/email-already-in-use") {
+          return true;
+        }
+        throw error;
+      }
     }
 
     async function getFirebaseState() {
@@ -1249,7 +1258,7 @@
           return { ok: true, role };
         } catch (error) {
           if (error.code === "auth/user-not-found" || error.code === "auth/invalid-credential" || error.code === "auth/invalid-login-credentials") {
-            if (await loginAlreadyCreated(name)) {
+            if (await firebaseLoginExists(email, password)) {
               throw new Error("Senha incorreta.");
             }
             const createError = new Error("FIRST_ACCESS_CONFIRM_PASSWORD");

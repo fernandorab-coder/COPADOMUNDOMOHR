@@ -1703,6 +1703,11 @@
       }
     }
 
+    function extraSummaryItem(label, pick, result) {
+      const resultText = result ? ` / Resultado: <span class="extras-value">${result}</span>` : "";
+      return `<span class="extras-item">${label}: <span class="extras-value">${pick || "-"}</span>${resultText}</span>`;
+    }
+
     function renderExtras() {
       const champion = officialChampion();
       const brazilPhase = officialBrazilPhase();
@@ -1733,7 +1738,11 @@
       saveExtrasBtn.title = closedExtras ? "Prazo encerrado" : "";
       extrasSummary.style.display = current.locked ? "block" : "none";
       extrasSummary.innerHTML = current.locked
-        ? `<span class="extras-item">Campeao: <span class="extras-value">${current.champion || "-"}</span> / Resultado: <span class="extras-value">${champion || "-"}</span></span><span class="extras-item">Fase do Brasil: <span class="extras-value">${normalizeBrazilPhase(current.brazilPhase) || "-"}</span> / Resultado: <span class="extras-value">${brazilPhase || "-"}</span></span><span class="extras-item">Brasil 11+ gols: <span class="extras-value">${current.brazilGoals || "-"}</span> / Resultado: <span class="extras-value">${brazilGoals || "-"}</span></span>`
+        ? [
+            extraSummaryItem("Campeao", current.champion, champion),
+            extraSummaryItem("Fase do Brasil", normalizeBrazilPhase(current.brazilPhase), brazilPhase),
+            extraSummaryItem("Brasil 11+ gols", current.brazilGoals, brazilGoals)
+          ].join("")
         : "";
       extrasStatus.textContent = !current.locked && closedExtras ? "Prazo das apostas extras encerrado." : "";
     }

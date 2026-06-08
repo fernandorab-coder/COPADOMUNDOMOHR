@@ -727,6 +727,43 @@
         line-height: 1.15;
       }
 
+      body.logged-in .header-grid {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px 10px;
+        align-items: end;
+      }
+
+      body.logged-in .header-copy {
+        display: contents;
+      }
+
+      body.logged-in h1 {
+        grid-column: 1 / -1;
+        justify-content: center;
+        margin: 0;
+        text-align: center;
+      }
+
+      body.logged-in .header-actions {
+        grid-column: 1;
+        margin-top: 0;
+        justify-content: flex-start;
+      }
+
+      body.logged-in .session-bar {
+        grid-column: 2;
+        display: grid;
+        justify-items: end;
+        gap: 8px;
+        margin-top: 0;
+      }
+
+      body.logged-in .session-bar button,
+      body.logged-in .utility-btn {
+        width: auto;
+      }
+
       .sub {
         font-size: 12px;
         line-height: 1.35;

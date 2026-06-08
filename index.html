@@ -96,6 +96,69 @@
       height: 4px;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .utility-btn {
+      min-height: 32px;
+      border-color: rgba(255, 223, 27, 0.75);
+      background: transparent;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .rules-dialog {
+      width: min(520px, calc(100% - 28px));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0;
+      background: var(--panel);
+      color: var(--ink);
+    }
+
+    .rules-dialog::backdrop {
+      background: rgba(0, 0, 0, 0.62);
+    }
+
+    .rules-dialog-content {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .rules-dialog h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .rules-list {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink);
+    }
+
+    .rules-list li {
+      margin: 0 0 7px;
+    }
+
+    .rules-notes {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .rules-dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .toolbar {
       display: grid;
       grid-template-columns: minmax(180px, 1fr) 170px 170px 190px auto auto;
@@ -557,6 +620,10 @@
       text-align: center;
     }
 
+    body:not(.logged-in) .header-actions {
+      justify-content: center;
+    }
+
     body.participant-mode .admin-only,
     body.participant-mode .meta {
       display: none;
@@ -875,20 +942,9 @@
       <div class="header-grid">
         <div class="header-copy">
           <h1>Copa do Mundo 2026 <img class="brand-logo" src="logo.png" alt="Mohr Print"></h1>
-          <p class="sub">
-            Regulamento das apostas:<br>
-            <span class="rules-spacer"></span>
-            • Acertar o campeão: 7 pontos<br>
-            • Acertar a fase em que o Brasil encerra sua participação: 5 pontos<br>
-            • Acertar se o Brasil fará 11 ou mais gols: 3 pontos<br>
-            • Acertar o placar exato dos jogos: 3 pontos<br>
-            • Acertar empate sem placar exato: 2 pontos<br>
-            • Acertar vitória sem placar exato: 1 ponto<br>
-            <span class="rules-divider"></span>
-            *Prazo para apostar na fase de grupos e apostas extras: 10/06/2026 às 23h00<br>
-            *Prazo para apostar no mata-mata: 1 dia antes do jogo até 23h00<br>
-            *O resultado dos jogos será apurado até a prorrogação.
-          </p>
+          <div class="header-actions">
+            <button id="rulesBtn" class="utility-btn" type="button">Regulamento</button>
+          </div>
         </div>
         <div class="session-bar">
           <span id="sessionInfo"></span>
@@ -897,6 +953,28 @@
       </div>
     </div>
   </header>
+
+  <dialog id="rulesDialog" class="rules-dialog" aria-labelledby="rulesDialogTitle">
+    <div class="rules-dialog-content">
+      <h2 id="rulesDialogTitle">Regulamento das apostas</h2>
+      <ul class="rules-list">
+        <li>Acertar o campeão: 7 pontos</li>
+        <li>Acertar a fase em que o Brasil encerra sua participação: 5 pontos</li>
+        <li>Acertar se o Brasil fará 11 ou mais gols: 3 pontos</li>
+        <li>Acertar o placar exato dos jogos: 3 pontos</li>
+        <li>Acertar empate sem placar exato: 2 pontos</li>
+        <li>Acertar vitória sem placar exato: 1 ponto</li>
+      </ul>
+      <p class="rules-notes">
+        <span>Prazo para apostar na fase de grupos e apostas extras: 10/06/2026 às 23h00</span>
+        <span>Prazo para apostar no mata-mata: 1 dia antes do jogo até 23h00</span>
+        <span>O resultado dos jogos será apurado até a prorrogação.</span>
+      </p>
+      <div class="rules-dialog-actions">
+        <button id="rulesCloseBtn" class="primary" type="button">Fechar</button>
+      </div>
+    </div>
+  </dialog>
 
   <main class="wrap">
     <section id="loginPanel" class="login-panel" aria-label="Login do bolao">
@@ -1161,6 +1239,9 @@
     const loginConfirmWrap = document.querySelector("#loginConfirmWrap");
     const loginBtn = document.querySelector("#loginBtn");
     const loginError = document.querySelector("#loginError");
+    const rulesBtn = document.querySelector("#rulesBtn");
+    const rulesDialog = document.querySelector("#rulesDialog");
+    const rulesCloseBtn = document.querySelector("#rulesCloseBtn");
     const logoutBtn = document.querySelector("#logoutBtn");
     const sessionInfo = document.querySelector("#sessionInfo");
     const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola"];
@@ -2321,6 +2402,17 @@
     });
     loginConfirmPin.addEventListener("keydown", event => {
       if (event.key === "Enter") login();
+    });
+    rulesBtn.addEventListener("click", () => {
+      rulesDialog.showModal();
+    });
+    rulesCloseBtn.addEventListener("click", () => {
+      rulesDialog.close();
+    });
+    rulesDialog.addEventListener("click", event => {
+      if (event.target === rulesDialog) {
+        rulesDialog.close();
+      }
     });
     logoutBtn.addEventListener("click", logout);
     function waitForAuthReady() {

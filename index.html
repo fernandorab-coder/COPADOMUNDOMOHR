@@ -7,19 +7,20 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f6f7f2;
+      --bg: #eef2ef;
       --panel: #ffffff;
-      --ink: #17211f;
-      --muted: #5b6863;
-      --line: #d9ded8;
-      --head: #0b5d57;
-      --header-bg: #A53692;
-      --accent: #c9362f;
-      --field: #fdfefa;
-      --focus: #1f7a8c;
-      --gold: #d8a10f;
-      --silver: #aeb6bd;
-      --bronze: #b87333;
+      --ink: #111814;
+      --muted: #52615a;
+      --line: #cbd7d0;
+      --head: #00513b;
+      --header-bg: #00513b;
+      --accent: #ffdf1b;
+      --accent-ink: #102218;
+      --field: #f9fbf8;
+      --focus: #ffdf1b;
+      --gold: #ffdf1b;
+      --silver: #aeb8b2;
+      --bronze: #b78a44;
     }
 
     * {
@@ -58,7 +59,7 @@
     .sub {
       margin: 0;
       max-width: 850px;
-      color: #e7f0ed;
+      color: #d8ece3;
       font-size: 15px;
     }
 
@@ -122,7 +123,7 @@
     button.primary {
       background: var(--accent);
       border-color: var(--accent);
-      color: #fff;
+      color: var(--accent-ink);
     }
 
     input:focus,
@@ -149,7 +150,7 @@
       padding: 8px 10px;
       color: var(--muted);
       font-size: 12px;
-      background: #fbfcf8;
+      background: #f5f8f5;
       border-top: 1px solid var(--line);
     }
 
@@ -180,22 +181,22 @@
       padding: 10px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fbfcf8;
+      background: #f7faf7;
     }
 
     .rank-card.gold {
       border-color: var(--gold);
-      background: #fff9df;
+      background: #fff7b8;
     }
 
     .rank-card.silver {
       border-color: var(--silver);
-      background: #f1f4f6;
+      background: #f0f4f2;
     }
 
     .rank-card.bronze {
       border-color: var(--bronze);
-      background: #fff0e2;
+      background: #fff1db;
     }
 
     .rank-place {
@@ -225,7 +226,7 @@
 
     .medal.silver {
       background: var(--silver);
-      color: #17211f;
+      color: #111814;
     }
 
     .medal.bronze {
@@ -270,23 +271,23 @@
       position: sticky;
       top: 0;
       z-index: 2;
-      background: #e9efec;
-      color: #23312e;
+      background: #dce8e1;
+      color: #17251e;
       font-size: 12px;
       font-weight: 400;
       text-transform: none;
     }
 
     tbody tr:nth-child(even) {
-      background: #fbfcf8;
+      background: #f7faf7;
     }
 
     tbody tr.hit-row td {
-      background: #e6f6ec;
+      background: #dff3e9;
     }
 
     tbody tr.exact-row td {
-      background: #fff3c4;
+      background: #fff4a8;
     }
 
     .phase-row td {
@@ -336,7 +337,7 @@
       display: inline-block;
       padding: 5px 7px;
       border-radius: 6px;
-      background: #e9efec;
+      background: #dce8e1;
       color: var(--muted);
       font-size: 12px;
       font-weight: 400;
@@ -375,7 +376,7 @@
       display: none;
       padding: 10px;
       border: 1px solid var(--line);
-      background: #fbfcf8;
+      background: #f7faf7;
       white-space: nowrap;
     }
 
@@ -487,7 +488,7 @@
       gap: 10px;
       margin: 0;
       padding: 0;
-      color: #e7f0ed;
+      color: #d8ece3;
       font-weight: 400;
     }
 

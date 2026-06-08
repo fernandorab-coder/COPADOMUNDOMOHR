@@ -1350,6 +1350,9 @@
         groupFilter.add(new Option(`Grupo ${group}`, group));
       });
 
+      loginUser.add(new Option("Selecione", ""));
+      loginUser.value = "";
+
       participants.forEach(name => {
         loginUser.add(new Option(name, name));
         predictions[name] = predictions[name] || {};
@@ -2176,6 +2179,11 @@
       const name = loginUser.value;
       const password = loginPin.value.trim();
       const confirmation = loginConfirmPin.value.trim();
+
+      if (!name) {
+        loginError.textContent = "Selecione um usuario.";
+        return;
+      }
 
       if (!password) {
         loginError.textContent = "Digite a senha.";

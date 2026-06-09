@@ -1698,7 +1698,7 @@
           locked: true,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
-        return { ok: true, state: await getFirebaseState() };
+        return { ok: true };
       }
 
       if (path === "/api/prediction") {
@@ -1715,7 +1715,7 @@
           locked: true,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        return { ok: true, state: await getFirebaseState() };
+        return { ok: true };
       }
 
       if (path === "/api/extras") {
@@ -1731,7 +1731,7 @@
           locked: true,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        return { ok: true, state: await getFirebaseState() };
+        return { ok: true };
       }
 
       throw new Error("Rota nao encontrada.");
@@ -1887,14 +1887,20 @@
     async function saveScore(matchNumber, homeValue, awayValue, penHomeValue = "", penAwayValue = "") {
       if (useDatabase) {
         try {
-          const result = await apiRequest("/api/score", {
+          await apiRequest("/api/score", {
             matchNumber,
             a: homeValue,
             b: awayValue,
             pa: penHomeValue,
             pb: penAwayValue
           });
-          applyServerState(result.state);
+          scores[matchNumber] = {
+            a: homeValue,
+            b: awayValue,
+            pa: penHomeValue,
+            pb: penAwayValue,
+            locked: true
+          };
         } catch (error) {
           alert(error.message);
           return;
@@ -1925,13 +1931,18 @@
       }
       if (useDatabase) {
         try {
-          const result = await apiRequest("/api/prediction", {
+          await apiRequest("/api/prediction", {
             participant,
             matchNumber,
             a: homeValue,
             b: awayValue
           });
-          applyServerState(result.state);
+          predictions[participant] = predictions[participant] || {};
+          predictions[participant][matchNumber] = {
+            a: homeValue,
+            b: awayValue,
+            locked: true
+          };
         } catch (error) {
           alert(error.message);
           return;
@@ -2085,13 +2096,18 @@
       if (confirm("Depois de salvar essas apostas, elas nao poderao ser alteradas. Confirmar?")) {
         if (useDatabase) {
           try {
-            const result = await apiRequest("/api/extras", {
+            await apiRequest("/api/extras", {
               participant: currentSession.name,
               champion: championPick.value,
               brazilPhase: brazilPick.value,
               brazilGoals: brazilGoalsPick.value
             });
-            applyServerState(result.state);
+            extraPredictions[currentSession.name] = {
+              champion: championPick.value,
+              brazilPhase: brazilPick.value,
+              brazilGoals: brazilGoalsPick.value,
+              locked: true
+            };
           } catch (error) {
             alert(error.message);
             return;

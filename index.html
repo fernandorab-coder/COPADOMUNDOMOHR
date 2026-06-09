@@ -913,6 +913,214 @@
         font-size: 11px;
       }
 
+      .matches-shell {
+        overflow-x: visible;
+      }
+
+      .matches-shell::after {
+        display: none;
+      }
+
+      .matches-shell table,
+      .matches-shell tbody {
+        display: block;
+        min-width: 0;
+        width: 100%;
+      }
+
+      .matches-shell thead {
+        display: none;
+      }
+
+      .matches-shell tbody {
+        display: grid;
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .matches-shell tbody tr {
+        display: grid;
+        grid-template-columns: 52px minmax(70px, 1fr) 42px 40px 40px minmax(0, 1fr) 64px;
+        grid-template-areas:
+          "num date group points points points save"
+          "teamA teamA guessA guessB teamB teamB save";
+        gap: 6px;
+        align-items: stretch;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #262826;
+      }
+
+      body.admin-mode .matches-shell tbody tr {
+        grid-template-columns: minmax(0, 1fr) 38px 38px 38px 38px minmax(0, 1fr) 64px;
+        grid-template-areas:
+          "num date date group group group save"
+          "teamA officialA officialB penA penB teamB save";
+      }
+
+      .matches-shell tbody tr:nth-child(even) {
+        background: #262826;
+      }
+
+      .matches-shell tbody tr.exact-row,
+      .matches-shell tbody tr.exact-row td {
+        background: #4a421b;
+      }
+
+      .matches-shell tbody tr.hit-row,
+      .matches-shell tbody tr.hit-row td {
+        background: #173c2c;
+      }
+
+      .matches-shell tbody tr.phase-row {
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+
+      .matches-shell .phase-row td {
+        display: block;
+        padding: 7px 8px;
+        border: 0;
+        border-radius: 6px;
+        background: var(--head);
+        white-space: normal;
+      }
+
+      .matches-shell td {
+        display: flex;
+        min-width: 0;
+        width: auto;
+        padding: 0;
+        border: 0;
+        align-items: center;
+        justify-content: center;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+
+      .matches-shell .stage {
+        display: none;
+      }
+
+      .matches-shell .num {
+        grid-area: num;
+        justify-content: flex-start;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .matches-shell .date {
+        grid-area: date;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .matches-shell .group {
+        grid-area: group;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .matches-shell .team {
+        width: auto;
+        font-size: 12px;
+        line-height: 1.15;
+      }
+
+      .matches-shell .team-a {
+        grid-area: teamA;
+        justify-content: flex-end;
+        text-align: right;
+      }
+
+      .matches-shell .team-b {
+        grid-area: teamB;
+        justify-content: flex-start;
+        text-align: left;
+      }
+
+      .matches-shell .guess-score-a {
+        grid-area: guessA;
+      }
+
+      .matches-shell .guess-score-b {
+        grid-area: guessB;
+      }
+
+      .matches-shell .official-score-a {
+        grid-area: officialA;
+      }
+
+      .matches-shell .official-score-b {
+        grid-area: officialB;
+      }
+
+      .matches-shell .pen-score-a {
+        grid-area: penA;
+      }
+
+      .matches-shell .pen-score-b {
+        grid-area: penB;
+      }
+
+      .matches-shell .points {
+        grid-area: points;
+        color: var(--accent);
+        font-size: 12px;
+      }
+
+      .matches-shell .save-col {
+        grid-area: save;
+        width: auto;
+      }
+
+      .matches-shell .save-col button {
+        min-height: 100%;
+        padding: 4px;
+      }
+
+      .matches-shell .score {
+        width: auto;
+      }
+
+      .matches-shell .score input {
+        width: 36px;
+        min-height: 34px;
+      }
+
+      .matches-shell .num::before,
+      .matches-shell .date::before,
+      .matches-shell .group::before,
+      .matches-shell .points::before {
+        content: attr(data-label) " ";
+        margin-right: 3px;
+        color: var(--muted);
+      }
+
+      .matches-shell .date::before {
+        content: "";
+        margin-right: 0;
+      }
+
+      .matches-shell .group::before {
+        content: "G ";
+      }
+
+      .matches-shell .points::before {
+        content: "Pts ";
+      }
+
+      body.participant-mode .matches-shell .admin-only,
+      body.participant-mode .matches-shell .admin-save,
+      body.admin-mode .matches-shell .participant-only,
+      body.admin-mode .matches-shell .participant-save {
+        display: none;
+      }
+
       .session-bar {
         display: none;
         width: 100%;
@@ -1096,7 +1304,7 @@
       </label>
     </section>
 
-    <section class="table-shell">
+    <section class="table-shell matches-shell">
       <table>
         <thead>
           <tr>
@@ -2216,20 +2424,20 @@
                 ? '<span class="saved-badge" title="Prazo encerrado">Prazo</span>'
             : '<button class="save-prediction" type="button">Salvar</button>';
           row.innerHTML = `
-            <td class="num">${match.n}</td>
-            <td class="date">${dateFmt.format(new Date(`${match.d}T00:00:00Z`))}</td>
+            <td class="num" data-label="Jogo">${match.n}</td>
+            <td class="date" data-label="Data">${dateFmt.format(new Date(`${match.d}T00:00:00Z`))}</td>
             <td class="stage">${match.s}</td>
-            <td class="group">${match.g || "-"}</td>
-            <td class="team">${teamA}</td>
-            <td class="score admin-only"><input class="official-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Placar de ${teams.a} no jogo ${match.n}" value="${current.a || ""}"${officialLock}></td>
-            <td class="score admin-only"><input class="official-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Placar de ${teams.b} no jogo ${match.n}" value="${current.b || ""}"${officialLock}></td>
-            <td class="score admin-only">${penaltyCellA}</td>
-            <td class="score admin-only">${penaltyCellB}</td>
-            <td class="score participant-only"><input class="guess-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Palpite de ${participant} para ${teams.a} no jogo ${match.n}" value="${guess.a || ""}"${guessLock}></td>
-            <td class="score participant-only"><input class="guess-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Palpite de ${participant} para ${teams.b} no jogo ${match.n}" value="${guess.b || ""}"${guessLock}></td>
-            <td class="team">${teamB}</td>
+            <td class="group" data-label="Grupo">${match.g || "-"}</td>
+            <td class="team team-a">${teamA}</td>
+            <td class="score admin-only official-score-a" data-label="Oficial"><input class="official-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Placar de ${teams.a} no jogo ${match.n}" value="${current.a || ""}"${officialLock}></td>
+            <td class="score admin-only official-score-b" data-label="Oficial"><input class="official-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Placar de ${teams.b} no jogo ${match.n}" value="${current.b || ""}"${officialLock}></td>
+            <td class="score admin-only pen-score-a" data-label="Pen.">${penaltyCellA}</td>
+            <td class="score admin-only pen-score-b" data-label="Pen.">${penaltyCellB}</td>
+            <td class="score participant-only guess-score-a" data-label="Palpite"><input class="guess-a" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Palpite de ${participant} para ${teams.a} no jogo ${match.n}" value="${guess.a || ""}"${guessLock}></td>
+            <td class="score participant-only guess-score-b" data-label="Palpite"><input class="guess-b" inputmode="numeric" pattern="[0-9]*" maxlength="2" aria-label="Palpite de ${participant} para ${teams.b} no jogo ${match.n}" value="${guess.b || ""}"${guessLock}></td>
+            <td class="team team-b">${teamB}</td>
             <td class="save-col admin-save">${officialSaveCell}</td>
-            <td class="points participant-only">${points === "" ? "-" : points}</td>
+            <td class="points participant-only" data-label="Pontos">${points === "" ? "-" : points}</td>
             <td class="save-col participant-save">${saveCell}</td>
           `;
 

@@ -800,8 +800,9 @@
       }
 
       .ranking {
-        padding: 10px;
-        margin: 8px 0 10px;
+        gap: 6px;
+        padding: 8px;
+        margin: 6px 0 8px;
       }
 
       .ranking h2,
@@ -811,17 +812,52 @@
       }
 
       .ranking-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5px;
       }
 
       .rank-card {
-        min-height: 62px;
-        padding: 8px;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+          "place score"
+          "name name";
+        align-items: center;
+        min-height: 38px;
+        padding: 5px 7px;
+        gap: 1px 6px;
+      }
+
+      .rank-place {
+        grid-area: place;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      .rank-name {
+        grid-area: name;
+        min-width: 0;
+        overflow: hidden;
+        color: var(--ink);
+        font-size: 11px;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .rank-score {
-        font-size: 18px;
+        grid-area: score;
+        justify-self: end;
+        color: var(--accent);
+        font-size: 14px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .medal {
+        width: 19px;
+        height: 19px;
+        margin-right: 0;
+        font-size: 11px;
       }
 
       .extras {
@@ -1142,7 +1178,7 @@
 
     @media (max-width: 420px) {
       .ranking-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       h1,

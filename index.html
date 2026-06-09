@@ -100,7 +100,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 0;
     }
 
     .utility-btn {
@@ -568,16 +568,52 @@
       display: none;
       align-items: center;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 0;
       margin: 0;
-      padding: 0;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
       color: #d8ece3;
       font-weight: 400;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    .session-bar button,
+    .session-user {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     .session-bar button {
-      min-height: 34px;
-      padding: 6px 10px;
+      border-color: transparent;
+      background: transparent;
+      color: #eef8f1;
+    }
+
+    .session-bar button:hover {
+      border-color: rgba(255, 223, 27, 0.35);
+      background: rgba(255, 223, 27, 0.1);
+      color: var(--accent);
+    }
+
+    .session-bar .utility-btn {
+      color: var(--accent);
+    }
+
+    .session-user {
+      color: #d8ece3;
+    }
+
+    .session-bar > * + * {
+      margin-left: 4px;
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
     }
 
     body.logged-in .session-bar {
@@ -604,8 +640,7 @@
     }
 
     body:not(.logged-in) .sub,
-    body:not(.logged-in) .session-bar,
-    body:not(.logged-in) .header-actions {
+    body:not(.logged-in) .session-bar {
       display: none;
     }
 
@@ -619,10 +654,6 @@
       margin-left: auto;
       margin-right: auto;
       text-align: center;
-    }
-
-    body:not(.logged-in) .header-actions {
-      justify-content: center;
     }
 
     body.participant-mode .admin-only,
@@ -694,7 +725,6 @@
 
       .session-bar {
         justify-content: flex-start;
-        order: -1;
       }
 
       .toolbar {
@@ -729,43 +759,34 @@
 
       body.logged-in .header-grid {
         display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 14px 10px;
-        align-items: end;
-      }
-
-      body.logged-in .header-copy {
-        display: contents;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        align-items: center;
       }
 
       body.logged-in h1 {
-        grid-column: 1 / -1;
-        grid-row: 1;
         justify-content: center;
         margin: 0;
         text-align: center;
       }
 
-      body.logged-in .header-actions {
-        grid-column: 1;
-        grid-row: 2;
-        margin-top: 0;
-        justify-content: flex-start;
-      }
-
       body.logged-in .session-bar {
-        grid-column: 2;
-        grid-row: 2;
-        display: grid;
-        justify-items: end;
-        gap: 8px;
+        justify-self: center;
+        justify-content: center;
         margin-top: 0;
-        order: initial;
+        max-width: 100%;
       }
 
       body.logged-in .session-bar button,
-      body.logged-in .utility-btn {
+      body.logged-in .session-user {
         width: auto;
+      }
+
+      .session-bar button,
+      .session-user {
+        min-height: 30px;
+        padding: 6px 8px;
+        font-size: 12px;
       }
 
       .sub {
@@ -786,7 +807,6 @@
 
       .login-actions button,
       .extras button,
-      .session-bar button,
       button.primary {
         width: 100%;
       }
@@ -1159,12 +1179,12 @@
 
       .session-bar {
         display: none;
-        width: 100%;
-        justify-content: stretch;
-        align-items: stretch;
-        flex-direction: column;
-        gap: 6px;
-        margin-top: 8px;
+        width: auto;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 0;
+        margin-top: 0;
       }
 
       body.logged-in .session-bar {
@@ -1228,12 +1248,10 @@
       <div class="header-grid">
         <div class="header-copy">
           <h1>Copa do Mundo 2026 <img class="brand-logo" src="logo.png" alt="Mohr Print"></h1>
-          <div class="header-actions">
-            <button id="rulesBtn" class="utility-btn" type="button">Regulamento</button>
-          </div>
         </div>
         <div class="session-bar">
-          <span id="sessionInfo"></span>
+          <button id="rulesBtn" class="utility-btn" type="button">Regulamento</button>
+          <span id="sessionInfo" class="session-user"></span>
           <button id="logoutBtn" type="button">Sair</button>
         </div>
       </div>

@@ -24,6 +24,7 @@ service cloud.firestore {
         "charles@bolaomohr.local",
         "fernando@bolaomohr.local",
         "cebola@bolaomohr.local",
+        "guilherme@bolaomohr.local",
         "administrador@bolaomohr.local"
       ];
     }
@@ -37,7 +38,8 @@ service cloud.firestore {
         (email() == "murilo@bolaomohr.local" && name == "Murilo") ||
         (email() == "charles@bolaomohr.local" && name == "Charles") ||
         (email() == "fernando@bolaomohr.local" && name == "Fernando") ||
-        (email() == "cebola@bolaomohr.local" && name == "Cebola");
+        (email() == "cebola@bolaomohr.local" && name == "Cebola") ||
+        (email() == "guilherme@bolaomohr.local" && name == "Guilherme");
     }
 
     function isOwnUserDoc(name) {

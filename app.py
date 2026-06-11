@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(ROOT, "bolao.db")
 ADMIN_PASSWORD = "9999"
-PARTICIPANTS = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola"]
+PARTICIPANTS = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola", "Guilherme"]
 
 
 def db():

@@ -1555,7 +1555,7 @@
     const rulesCloseBtn = document.querySelector("#rulesCloseBtn");
     const logoutBtn = document.querySelector("#logoutBtn");
     const sessionInfo = document.querySelector("#sessionInfo");
-    const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola"];
+    const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola", "Guilherme"];
     const adminPassword = "9999";
     const storageKey = "placares-copa-2026-v13";
     const predictionsKey = "palpites-copa-2026-v13";
@@ -1806,6 +1806,10 @@
       return new Date() > matchDeadline(match);
     }
 
+    function canSubmitPredictionAfterDeadline(participant, match) {
+      return participant === "Amilton" && match?.s === "Fase de grupos";
+    }
+
     function extrasClosed() {
       return new Date() > new Date(2026, 5, 10, 23, 0, 0);
     }
@@ -1932,7 +1936,7 @@
 
     async function savePrediction(participant, matchNumber, homeValue, awayValue) {
       const match = matches.find(item => item.n === matchNumber);
-      if (match && predictionClosed(match)) {
+      if (match && predictionClosed(match) && !canSubmitPredictionAfterDeadline(participant, match)) {
         alert("O prazo para apostar neste jogo ja encerrou.");
         return;
       }
@@ -2379,6 +2383,7 @@
     function renderComparison(currentMatches) {
       const resolvedTeams = buildResolvedTeams();
       const showExtras = extrasClosed();
+      const comparisonColspan = participants.length + 2;
       comparisonHead.innerHTML = `
         <tr>
           <th>Partida</th>
@@ -2390,7 +2395,7 @@
       comparisonBody.innerHTML = "";
       if (showExtras) {
         comparisonBody.insertAdjacentHTML("beforeend", `
-          <tr class="phase-row"><td colspan="10">Apostas extras</td></tr>
+          <tr class="phase-row"><td colspan="${comparisonColspan}">Apostas extras</td></tr>
           <tr>
             <td class="match-cell">Campeao</td>
             <td class="guess-cell">${officialChampion() || "-"}</td>
@@ -2419,7 +2424,7 @@
       visibleMatches.forEach(match => {
         if (match.s !== comparisonPhase) {
           comparisonPhase = match.s;
-          comparisonBody.insertAdjacentHTML("beforeend", `<tr class="phase-row"><td colspan="10">${comparisonPhase}</td></tr>`);
+          comparisonBody.insertAdjacentHTML("beforeend", `<tr class="phase-row"><td colspan="${comparisonColspan}">${comparisonPhase}</td></tr>`);
         }
 
         const teams = displayTeams(match, resolvedTeams);
@@ -2507,7 +2512,7 @@
             row.classList.add("hit-row");
           }
           const officialLocked = Boolean(current.locked);
-          const closedByDeadline = predictionClosed(match);
+          const closedByDeadline = predictionClosed(match) && !canSubmitPredictionAfterDeadline(participant, match);
           const isLocked = Boolean(guess.locked);
           const officialLock = !isAdmin || officialLocked ? " disabled" : "";
           const guessLock = guessDisabled || isLocked || closedByDeadline ? " disabled" : "";

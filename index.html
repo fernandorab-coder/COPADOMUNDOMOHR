@@ -1806,8 +1806,20 @@
       return new Date() > matchDeadline(match);
     }
 
+    function exceptionDeadline() {
+      return new Date(2026, 5, 12, 14, 0, 0);
+    }
+
+    function hasLateEntryException(participant) {
+      return ["Amilton", "Guilherme"].includes(participant) && new Date() <= exceptionDeadline();
+    }
+
     function canSubmitPredictionAfterDeadline(participant, match) {
-      return participant === "Amilton" && match?.s === "Fase de grupos";
+      return hasLateEntryException(participant) && match?.s === "Fase de grupos" && match.n !== 1;
+    }
+
+    function canSubmitExtrasAfterDeadline(participant) {
+      return hasLateEntryException(participant);
     }
 
     function extrasClosed() {
@@ -2117,7 +2129,7 @@
       const current = extraPredictions[currentSession.name] || {};
       if (current.locked) return;
 
-      if (extrasClosed()) {
+      if (extrasClosed() && !canSubmitExtrasAfterDeadline(currentSession.name)) {
         alert("O prazo para salvar as apostas extras ja encerrou.");
         return;
       }
@@ -2187,7 +2199,7 @@
       }
 
       const current = extraPredictions[currentSession.name] || {};
-      const closedExtras = extrasClosed();
+      const closedExtras = extrasClosed() && !canSubmitExtrasAfterDeadline(currentSession.name);
       championPick.disabled = Boolean(current.locked) || closedExtras;
       brazilPick.disabled = Boolean(current.locked) || closedExtras;
       brazilGoalsPick.disabled = Boolean(current.locked) || closedExtras;

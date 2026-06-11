@@ -1822,6 +1822,20 @@
       return hasLateEntryException(participant);
     }
 
+    function lateEntryWindowOpen() {
+      return new Date() <= exceptionDeadline();
+    }
+
+    function comparisonVisibleForMatch(match) {
+      if (!predictionClosed(match)) return false;
+      if (match?.s === "Fase de grupos" && lateEntryWindowOpen()) return false;
+      return true;
+    }
+
+    function extrasVisibleInComparison() {
+      return extrasClosed() && !lateEntryWindowOpen();
+    }
+
     function extrasClosed() {
       return new Date() > new Date(2026, 5, 10, 23, 0, 0);
     }
@@ -2394,7 +2408,7 @@
 
     function renderComparison(currentMatches) {
       const resolvedTeams = buildResolvedTeams();
-      const showExtras = extrasClosed();
+      const showExtras = extrasVisibleInComparison();
       const comparisonColspan = participants.length + 2;
       comparisonHead.innerHTML = `
         <tr>
@@ -2426,7 +2440,7 @@
         `);
       }
 
-      const visibleMatches = currentMatches.filter(match => predictionClosed(match));
+      const visibleMatches = currentMatches.filter(match => comparisonVisibleForMatch(match));
 
       if (!visibleMatches.length) {
         return;

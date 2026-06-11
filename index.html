@@ -2341,17 +2341,14 @@
     }
 
     function formatGuess(guess, points) {
-      if (!guess?.locked || guess.a === undefined || guess.b === undefined) return "-";
+      if (!guess?.locked || guess.a === undefined || guess.a === "" || guess.b === undefined || guess.b === "") return "Sem palpite";
       const pointText = points === "" ? "" : `<span class="guess-points">(${points})</span>`;
       return `${guess.a} x ${guess.b}${pointText}`;
     }
 
     function renderComparison(currentMatches) {
       const resolvedTeams = buildResolvedTeams();
-      const allExtrasComplete = participants.every(name => {
-        const extra = extraPredictions[name] || {};
-        return extra.locked && extra.champion && extra.brazilPhase && extra.brazilGoals;
-      });
+      const showExtras = extrasClosed();
       comparisonHead.innerHTML = `
         <tr>
           <th>Partida</th>
@@ -2361,40 +2358,35 @@
       `;
 
       comparisonBody.innerHTML = "";
-      if (allExtrasComplete) {
+      if (showExtras) {
         comparisonBody.insertAdjacentHTML("beforeend", `
           <tr class="phase-row"><td colspan="10">Apostas extras</td></tr>
           <tr>
             <td class="match-cell">Campeao</td>
             <td class="guess-cell">${officialChampion() || "-"}</td>
-            ${participants.map(name => `<td class="guess-cell">${extraPredictions[name]?.champion || "-"}</td>`).join("")}
+            ${participants.map(name => `<td class="guess-cell">${extraPredictions[name]?.champion || "Sem palpite"}</td>`).join("")}
           </tr>
           <tr>
             <td class="match-cell">Fase do Brasil</td>
             <td class="guess-cell">${officialBrazilPhase() || "-"}</td>
-            ${participants.map(name => `<td class="guess-cell">${normalizeBrazilPhase(extraPredictions[name]?.brazilPhase) || "-"}</td>`).join("")}
+            ${participants.map(name => `<td class="guess-cell">${normalizeBrazilPhase(extraPredictions[name]?.brazilPhase) || "Sem palpite"}</td>`).join("")}
           </tr>
           <tr>
             <td class="match-cell">Brasil 11+ gols</td>
             <td class="guess-cell">${officialBrazilOver10Goals() || "-"}</td>
-            ${participants.map(name => `<td class="guess-cell">${extraPredictions[name]?.brazilGoals || "-"}</td>`).join("")}
+            ${participants.map(name => `<td class="guess-cell">${extraPredictions[name]?.brazilGoals || "Sem palpite"}</td>`).join("")}
           </tr>
         `);
       }
 
-      const completeMatches = currentMatches.filter(match => {
-        return participants.every(name => {
-          const guess = predictions[name]?.[match.n] || {};
-          return guess.locked && guess.a !== undefined && guess.a !== "" && guess.b !== undefined && guess.b !== "";
-        });
-      });
+      const visibleMatches = currentMatches.filter(match => predictionClosed(match));
 
-      if (!completeMatches.length) {
+      if (!visibleMatches.length) {
         return;
       }
 
       let comparisonPhase = "";
-      completeMatches.forEach(match => {
+      visibleMatches.forEach(match => {
         if (match.s !== comparisonPhase) {
           comparisonPhase = match.s;
           comparisonBody.insertAdjacentHTML("beforeend", `<tr class="phase-row"><td colspan="10">${comparisonPhase}</td></tr>`);

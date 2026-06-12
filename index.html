@@ -1298,7 +1298,7 @@
       </p>
       <p class="rules-notes">
         <span>Premia&ccedil;&atilde;o: <span id="rulesPrizePool">R$ 0,00</span> distribu&iacute;dos entre os 4 primeiros.</span>
-        <span>F&oacute;rmula: Pr&ecirc;mio = (Pontos&sup2; x Peso) / Soma dos Pontos Ponderados x 600.</span>
+        <span>F&oacute;rmula: Pr&ecirc;mio = (Pontos&sup2; x Peso) / Soma dos Pontos Ponderados<span id="rulesPrizeFormulaMultiplier"></span></span>
         <span>Pesos: 1&ordm; lugar = 1,6; 2&ordm; = 1,3; 3&ordm; = 1,1; 4&ordm; = 0,9.</span>
       </p>
       <p class="rules-notes">
@@ -1578,6 +1578,7 @@
     const rulesDialog = document.querySelector("#rulesDialog");
     const rulesCloseBtn = document.querySelector("#rulesCloseBtn");
     const rulesPrizePool = document.querySelector("#rulesPrizePool");
+    const rulesPrizeFormulaMultiplier = document.querySelector("#rulesPrizeFormulaMultiplier");
     const logoutBtn = document.querySelector("#logoutBtn");
     const sessionInfo = document.querySelector("#sessionInfo");
     const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola", "Guilherme"];
@@ -2508,8 +2509,12 @@
     }
 
     function updateRulesPrizePool() {
+      const prizePool = currentPrizePool();
       if (rulesPrizePool) {
-        rulesPrizePool.textContent = formatPrize(currentPrizePool());
+        rulesPrizePool.textContent = formatPrize(prizePool);
+      }
+      if (rulesPrizeFormulaMultiplier) {
+        rulesPrizeFormulaMultiplier.textContent = prizePool ? " x 600." : ".";
       }
     }
 

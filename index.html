@@ -2570,12 +2570,14 @@
         const card = document.createElement("div");
         const podium = ["gold", "silver", "bronze"][index] || "";
         const place = podium ? `<span class="medal ${podium}">${index + 1}</span>` : `${index + 1}º Lugar`;
-        card.className = `rank-card ${podium} ${item.prize ? "has-prize" : ""}`.trim();
+        const showPrize = index < 4;
+        const prizeValue = item.prize ?? 0;
+        card.className = `rank-card ${podium} ${showPrize ? "has-prize" : ""}`.trim();
         card.innerHTML = `
           <div class="rank-place">${place}</div>
           <div class="rank-name">${item.name}</div>
           <div class="rank-score">${item.score} pts</div>
-          ${item.prize ? `<div class="rank-prize">${formatPrize(item.prize)}</div>` : ""}
+          ${showPrize ? `<div class="rank-prize">${formatPrize(prizeValue)}</div>` : ""}
         `;
         rankingGrid.append(card);
       });

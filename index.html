@@ -357,6 +357,13 @@
       border-right: 0;
     }
 
+    .match-time {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
     th {
       position: sticky;
       top: 0;
@@ -1459,18 +1466,18 @@
       {n:10,d:"2026-06-14",s:"Fase de grupos",g:"E",a:"Alemanha",b:"Curacao",v:"Houston Stadium"},
       {n:11,d:"2026-06-14",s:"Fase de grupos",g:"F",a:"Paises Baixos",b:"Japao",v:"Dallas Stadium"},
       {n:12,d:"2026-06-14",s:"Fase de grupos",g:"F",a:"Suecia",b:"Tunisia",v:"Estadio Monterrey"},
-      {n:13,d:"2026-06-15",s:"Fase de grupos",g:"H",a:"Arabia Saudita",b:"Uruguai",v:"Miami Stadium"},
-      {n:14,d:"2026-06-15",s:"Fase de grupos",g:"H",a:"Espanha",b:"Cabo Verde",v:"Atlanta Stadium"},
-      {n:15,d:"2026-06-15",s:"Fase de grupos",g:"G",a:"Ira",b:"Nova Zelandia",v:"Los Angeles Stadium"},
-      {n:16,d:"2026-06-15",s:"Fase de grupos",g:"G",a:"Belgica",b:"Egito",v:"Seattle Stadium"},
-      {n:17,d:"2026-06-16",s:"Fase de grupos",g:"I",a:"Franca",b:"Senegal",v:"New York New Jersey Stadium"},
-      {n:18,d:"2026-06-16",s:"Fase de grupos",g:"I",a:"Iraque",b:"Noruega",v:"Boston Stadium"},
-      {n:19,d:"2026-06-16",s:"Fase de grupos",g:"J",a:"Argentina",b:"Argelia",v:"Kansas City Stadium"},
-      {n:20,d:"2026-06-16",s:"Fase de grupos",g:"J",a:"Austria",b:"Jordania",v:"San Francisco Bay Area Stadium"},
-      {n:21,d:"2026-06-17",s:"Fase de grupos",g:"L",a:"Gana",b:"Panama",v:"Toronto Stadium"},
-      {n:22,d:"2026-06-17",s:"Fase de grupos",g:"L",a:"Inglaterra",b:"Croacia",v:"Dallas Stadium"},
-      {n:23,d:"2026-06-17",s:"Fase de grupos",g:"K",a:"Portugal",b:"RD Congo",v:"Houston Stadium"},
-      {n:24,d:"2026-06-17",s:"Fase de grupos",g:"K",a:"Uzbequistao",b:"Colombia",v:"Mexico City Stadium"},
+      {n:13,d:"2026-06-15",t:"19:00",s:"Fase de grupos",g:"H",a:"Arabia Saudita",b:"Uruguai",v:"Miami Stadium"},
+      {n:14,d:"2026-06-15",t:"13:00",s:"Fase de grupos",g:"H",a:"Espanha",b:"Cabo Verde",v:"Atlanta Stadium"},
+      {n:15,d:"2026-06-15",t:"22:00",s:"Fase de grupos",g:"G",a:"Ira",b:"Nova Zelandia",v:"Los Angeles Stadium"},
+      {n:16,d:"2026-06-15",t:"16:00",s:"Fase de grupos",g:"G",a:"Belgica",b:"Egito",v:"Seattle Stadium"},
+      {n:17,d:"2026-06-16",t:"16:00",s:"Fase de grupos",g:"I",a:"Franca",b:"Senegal",v:"New York New Jersey Stadium"},
+      {n:18,d:"2026-06-16",t:"19:00",s:"Fase de grupos",g:"I",a:"Iraque",b:"Noruega",v:"Boston Stadium"},
+      {n:19,d:"2026-06-16",t:"22:00",s:"Fase de grupos",g:"J",a:"Argentina",b:"Argelia",v:"Kansas City Stadium"},
+      {n:20,d:"2026-06-17",t:"01:00",s:"Fase de grupos",g:"J",a:"Austria",b:"Jordania",v:"San Francisco Bay Area Stadium"},
+      {n:21,d:"2026-06-17",t:"20:00",s:"Fase de grupos",g:"L",a:"Gana",b:"Panama",v:"Toronto Stadium"},
+      {n:22,d:"2026-06-17",t:"17:00",s:"Fase de grupos",g:"L",a:"Inglaterra",b:"Croacia",v:"Dallas Stadium"},
+      {n:23,d:"2026-06-17",t:"14:00",s:"Fase de grupos",g:"K",a:"Portugal",b:"RD Congo",v:"Houston Stadium"},
+      {n:24,d:"2026-06-17",t:"23:00",s:"Fase de grupos",g:"K",a:"Uzbequistao",b:"Colombia",v:"Mexico City Stadium"},
       {n:25,d:"2026-06-18",s:"Fase de grupos",g:"A",a:"Tchequia",b:"Africa do Sul",v:"Atlanta Stadium"},
       {n:26,d:"2026-06-18",s:"Fase de grupos",g:"B",a:"Suica",b:"Bosnia e Herzegovina",v:"Los Angeles Stadium"},
       {n:27,d:"2026-06-18",s:"Fase de grupos",g:"B",a:"Canada",b:"Catar",v:"BC Place Vancouver"},
@@ -2406,6 +2413,10 @@
       return `${team} <span class="official-inline">(${score})</span>`;
     }
 
+    function matchOrderKey(match) {
+      return `${match.d}T${match.t || "99:99"}`;
+    }
+
     function filteredMatches() {
       const term = search.value.trim().toLowerCase();
       const stage = stageFilter.value;
@@ -2413,18 +2424,21 @@
       const resolvedTeams = buildResolvedTeams();
 
       return matches
-        .filter(match => !stage || match.s === stage)
-        .filter(match => !group || match.g === group)
-        .filter(match => {
+        .map((match, index) => ({match, index}))
+        .filter(({match}) => !stage || match.s === stage)
+        .filter(({match}) => !group || match.g === group)
+        .filter(({match}) => {
           if (match.n < 73) return true;
           const teams = displayTeams(match, resolvedTeams);
           return !/Grupo|Vencedor|Perdedor/.test(teams.a) && !/Grupo|Vencedor|Perdedor/.test(teams.b);
         })
-        .filter(match => {
+        .filter(({match}) => {
           if (!term) return true;
           const teams = displayTeams(match, resolvedTeams);
-          return [match.n, match.d, match.s, match.g, teams.a, teams.b].join(" ").toLowerCase().includes(term);
-        });
+          return [match.n, match.d, match.t, match.s, match.g, teams.a, teams.b].join(" ").toLowerCase().includes(term);
+        })
+        .sort((a, b) => matchOrderKey(a.match).localeCompare(matchOrderKey(b.match)) || a.index - b.index)
+        .map(({match}) => match);
     }
 
     function formatGuess(guess, points) {
@@ -2627,6 +2641,8 @@
             : "-";
           const teamA = isAdmin ? teams.a : teamWithOfficial(teams.a, current.a);
           const teamB = isAdmin ? teams.b : teamWithOfficial(teams.b, current.b, "left");
+          const dateText = dateFmt.format(new Date(`${match.d}T00:00:00Z`));
+          const dateCell = match.t ? `${dateText}<span class="match-time">${match.t}</span>` : dateText;
           const officialSaveCell = officialLocked
             ? '<span class="saved-badge">Salvo</span>'
             : '<button class="save-official" type="button">Salvar</button>';
@@ -2637,7 +2653,7 @@
             : '<button class="save-prediction" type="button">Salvar</button>';
           row.innerHTML = `
             <td class="num" data-label="Jogo">${match.n}</td>
-            <td class="date" data-label="Data">${dateFmt.format(new Date(`${match.d}T00:00:00Z`))}</td>
+            <td class="date" data-label="Data">${dateCell}</td>
             <td class="stage">${match.s}</td>
             <td class="group" data-label="Grupo">${match.g || "-"}</td>
             <td class="team team-a">${teamA}</td>

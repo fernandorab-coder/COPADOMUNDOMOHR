@@ -188,6 +188,10 @@
       font-weight: 400;
     }
 
+    .stats-points {
+      color: var(--accent);
+    }
+
     .toolbar {
       display: grid;
       grid-template-columns: minmax(180px, 1fr) 170px 170px 190px auto auto;
@@ -2171,7 +2175,7 @@
       statsBody.innerHTML = rows.map(item => `
         <tr>
           <td>${item.name}</td>
-          <td>${item.score}</td>
+          <td class="stats-points">${item.score}</td>
           <td>${item.tieBreak.exactScores}</td>
           <td>${item.tieBreak.drawNoExact}</td>
           <td>${item.tieBreak.winNoExact}</td>

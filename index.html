@@ -2242,6 +2242,10 @@
       }
     }
 
+    function clearControlFocus(element) {
+      window.setTimeout(() => element.blur(), 0);
+    }
+
     function officialChampion() {
       const resolvedTeams = buildResolvedTeams();
       return matchResult(matches.find(match => match.n === 104), resolvedTeams)?.winner || "";
@@ -3019,11 +3023,20 @@
     }
 
     search.addEventListener("input", render);
+    search.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        clearControlFocus(search);
+      }
+    });
     stageFilter.addEventListener("change", () => {
       updateGroupFilterVisibility();
       render();
+      clearControlFocus(stageFilter);
     });
-    groupFilter.addEventListener("change", render);
+    groupFilter.addEventListener("change", () => {
+      render();
+      clearControlFocus(groupFilter);
+    });
     saveExtrasBtn.addEventListener("click", saveExtras);
     loginUser.addEventListener("change", () => {
       loginPin.value = "";

@@ -2235,6 +2235,13 @@
       `).join("");
     }
 
+    function closeDialog(dialog) {
+      dialog.close();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }
+
     function officialChampion() {
       const resolvedTeams = buildResolvedTeams();
       return matchResult(matches.find(match => match.n === 104), resolvedTeams)?.winner || "";
@@ -3034,11 +3041,11 @@
       rulesDialog.showModal();
     });
     rulesCloseBtn.addEventListener("click", () => {
-      rulesDialog.close();
+      closeDialog(rulesDialog);
     });
     rulesDialog.addEventListener("click", event => {
       if (event.target === rulesDialog) {
-        rulesDialog.close();
+        closeDialog(rulesDialog);
       }
     });
     statsBtn.addEventListener("click", () => {
@@ -3046,11 +3053,11 @@
       statsDialog.showModal();
     });
     statsCloseBtn.addEventListener("click", () => {
-      statsDialog.close();
+      closeDialog(statsDialog);
     });
     statsDialog.addEventListener("click", event => {
       if (event.target === statsDialog) {
-        statsDialog.close();
+        closeDialog(statsDialog);
       }
     });
     logoutBtn.addEventListener("click", logout);

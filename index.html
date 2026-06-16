@@ -121,6 +121,10 @@
       color: var(--ink);
     }
 
+    .stats-dialog {
+      width: min(760px, calc(100% - 28px));
+    }
+
     .rules-dialog::backdrop {
       background: rgba(0, 0, 0, 0.62);
     }
@@ -157,6 +161,31 @@
     .rules-dialog-actions {
       display: flex;
       justify-content: flex-end;
+    }
+
+    .stats-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .stats-table {
+      min-width: 560px;
+    }
+
+    .stats-table th,
+    .stats-table td {
+      padding: 9px 10px;
+      text-align: center;
+    }
+
+    .stats-table th:first-child,
+    .stats-table td:first-child {
+      text-align: left;
+    }
+
+    .stats-table td {
+      font-weight: 600;
     }
 
     .toolbar {
@@ -1282,6 +1311,7 @@
         </div>
         <div class="session-bar">
           <button id="rulesBtn" class="utility-btn" type="button">Regulamento</button>
+          <button id="statsBtn" class="utility-btn" type="button">Estat&iacute;sticas</button>
           <span id="sessionInfo" class="session-user"></span>
           <button id="logoutBtn" type="button">Sair</button>
         </div>
@@ -1314,6 +1344,29 @@
       </p>
       <div class="rules-dialog-actions">
         <button id="rulesCloseBtn" class="primary" type="button">Fechar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="statsDialog" class="rules-dialog stats-dialog" aria-labelledby="statsDialogTitle">
+    <div class="rules-dialog-content">
+      <h2 id="statsDialogTitle">Estat&iacute;sticas dos apostadores</h2>
+      <div class="stats-table-wrap">
+        <table class="stats-table">
+          <thead>
+            <tr>
+              <th>Participante</th>
+              <th>Pontos</th>
+              <th>Placar exato</th>
+              <th>Empate</th>
+              <th>Vit&oacute;ria</th>
+            </tr>
+          </thead>
+          <tbody id="statsBody"></tbody>
+        </table>
+      </div>
+      <div class="rules-dialog-actions">
+        <button id="statsCloseBtn" class="primary" type="button">Fechar</button>
       </div>
     </div>
   </dialog>
@@ -1586,6 +1639,10 @@
     const rulesCloseBtn = document.querySelector("#rulesCloseBtn");
     const rulesPrizePool = document.querySelector("#rulesPrizePool");
     const rulesPrizeFormulaMultiplier = document.querySelector("#rulesPrizeFormulaMultiplier");
+    const statsBtn = document.querySelector("#statsBtn");
+    const statsDialog = document.querySelector("#statsDialog");
+    const statsCloseBtn = document.querySelector("#statsCloseBtn");
+    const statsBody = document.querySelector("#statsBody");
     const logoutBtn = document.querySelector("#logoutBtn");
     const sessionInfo = document.querySelector("#sessionInfo");
     const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola", "Guilherme"];
@@ -2071,7 +2128,8 @@
         champion: champion && extra.champion === champion ? 1 : 0,
         brazilPhase: brazilPhase && normalizeBrazilPhase(extra.brazilPhase) === brazilPhase ? 1 : 0,
         exactScores: 0,
-        drawNoExact: 0
+        drawNoExact: 0,
+        winNoExact: 0
       };
 
       matches.forEach(match => {
@@ -2080,10 +2138,45 @@
           stats.exactScores += 1;
         } else if (points === 2) {
           stats.drawNoExact += 1;
+        } else if (points === 1) {
+          stats.winNoExact += 1;
         }
       });
 
       return stats;
+    }
+
+    function statsForParticipant(name) {
+      return {
+        name,
+        score: totalFor(name),
+        tieBreak: tieBreakStatsFor(name)
+      };
+    }
+
+    function sortParticipantStats(a, b) {
+      return b.score - a.score ||
+        b.tieBreak.champion - a.tieBreak.champion ||
+        b.tieBreak.brazilPhase - a.tieBreak.brazilPhase ||
+        b.tieBreak.exactScores - a.tieBreak.exactScores ||
+        b.tieBreak.drawNoExact - a.tieBreak.drawNoExact ||
+        a.name.localeCompare(b.name, "pt-BR");
+    }
+
+    function renderStats() {
+      const rows = participants
+        .map(statsForParticipant)
+        .sort(sortParticipantStats);
+
+      statsBody.innerHTML = rows.map(item => `
+        <tr>
+          <td>${item.name}</td>
+          <td>${item.score}</td>
+          <td>${item.tieBreak.exactScores}</td>
+          <td>${item.tieBreak.drawNoExact}</td>
+          <td>${item.tieBreak.winNoExact}</td>
+        </tr>
+      `).join("");
     }
 
     function officialChampion() {
@@ -2890,6 +2983,18 @@
     rulesDialog.addEventListener("click", event => {
       if (event.target === rulesDialog) {
         rulesDialog.close();
+      }
+    });
+    statsBtn.addEventListener("click", () => {
+      renderStats();
+      statsDialog.showModal();
+    });
+    statsCloseBtn.addEventListener("click", () => {
+      statsDialog.close();
+    });
+    statsDialog.addEventListener("click", event => {
+      if (event.target === statsDialog) {
+        statsDialog.close();
       }
     });
     logoutBtn.addEventListener("click", logout);

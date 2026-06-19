@@ -1890,6 +1890,18 @@
       throw new Error("Rota nao encontrada.");
     }
 
+    const manualPredictionCorrections = [
+      { participant: "Ana Paula", matchNumber: "21", a: "1", b: "0" }
+    ];
+
+    function applyManualPredictionCorrections() {
+      manualPredictionCorrections.forEach(({ participant, matchNumber, a, b }) => {
+        predictions[participant] = predictions[participant] || {};
+        if (predictions[participant][matchNumber]?.locked) return;
+        predictions[participant][matchNumber] = { a, b, locked: true };
+      });
+    }
+
     function applyServerState(state) {
       scores = state.scores || {};
       predictions = state.predictions || {};
@@ -1898,6 +1910,7 @@
       (state.passwordUsers || []).forEach(name => {
         userPasswords[name] = true;
       });
+      applyManualPredictionCorrections();
     }
 
     async function loadDatabaseState() {

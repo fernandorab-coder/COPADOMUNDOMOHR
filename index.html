@@ -1526,12 +1526,6 @@
       <div id="extrasStatus" class="hint"></div>
     </section>
 
-    <section id="manualThirdsPanel" class="manual-thirds admin-only" aria-label="Terceiros colocados manuais">
-      <h2>Terceiros colocados do mata-mata</h2>
-      <div id="manualThirdsGrid" class="manual-thirds-grid"></div>
-      <div class="hint">Preencha manualmente as sele&ccedil;&otilde;es das vagas de 3&ordm; colocado usadas pela FIFA.</div>
-    </section>
-
     <section class="toolbar" aria-label="Filtros da tabela">
       <label>
         Buscar
@@ -1576,7 +1570,13 @@
       </table>
     </section>
 
-    <section class="comparison" aria-label="Todos os palpites">
+    <section id="manualThirdsPanel" class="manual-thirds admin-only" aria-label="Terceiros colocados manuais">
+      <h2>Terceiros colocados do mata-mata</h2>
+      <div id="manualThirdsGrid" class="manual-thirds-grid"></div>
+      <div class="hint">Preencha manualmente as sele&ccedil;&otilde;es das vagas de 3&ordm; colocado usadas pela FIFA.</div>
+    </section>
+
+    <section class="comparison participant-only" aria-label="Todos os palpites">
       <h2>Todos os palpites</h2>
       <div class="table-shell">
         <table>
@@ -3044,7 +3044,12 @@
           body.append(row);
         });
 
-      renderComparison(currentMatches);
+      if (!isAdmin) {
+        renderComparison(currentMatches);
+      } else {
+        comparisonHead.innerHTML = "";
+        comparisonBody.innerHTML = "";
+      }
     }
 
     function applySession() {

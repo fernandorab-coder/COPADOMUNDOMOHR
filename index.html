@@ -2590,6 +2590,18 @@
       return `${match.d}T${match.t || "99:99"}`;
     }
 
+    function hasPlaceholderTeam(team) {
+      return /Grupo|Vencedor|Perdedor/.test(team);
+    }
+
+    function shouldShowMatchInTable(match, resolvedTeams) {
+      if (currentSession?.role === "admin") return true;
+      if (match.n < 73) return true;
+
+      const teams = displayTeams(match, resolvedTeams);
+      return !hasPlaceholderTeam(teams.a) && !hasPlaceholderTeam(teams.b);
+    }
+
     function filteredMatches() {
       const term = search.value.trim().toLowerCase();
       const stage = stageFilter.value;
@@ -2600,12 +2612,7 @@
         .map((match, index) => ({match, index}))
         .filter(({match}) => !stage || match.s === stage)
         .filter(({match}) => !group || match.g === group)
-        .filter(({match}) => {
-          if (currentSession?.role === "admin") return true;
-          if (match.n < 73) return true;
-          const teams = displayTeams(match, resolvedTeams);
-          return !/Grupo|Vencedor|Perdedor/.test(teams.a) && !/Grupo|Vencedor|Perdedor/.test(teams.b);
-        })
+        .filter(({match}) => shouldShowMatchInTable(match, resolvedTeams))
         .filter(({match}) => {
           if (!term) return true;
           const teams = displayTeams(match, resolvedTeams);

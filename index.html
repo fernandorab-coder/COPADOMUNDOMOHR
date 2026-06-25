@@ -2601,6 +2601,7 @@
         .filter(({match}) => !stage || match.s === stage)
         .filter(({match}) => !group || match.g === group)
         .filter(({match}) => {
+          if (currentSession?.role === "admin") return true;
           if (match.n < 73) return true;
           const teams = displayTeams(match, resolvedTeams);
           return !/Grupo|Vencedor|Perdedor/.test(teams.a) && !/Grupo|Vencedor|Perdedor/.test(teams.b);

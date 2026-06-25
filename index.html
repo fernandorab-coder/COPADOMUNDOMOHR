@@ -2579,9 +2579,10 @@
     }
 
     function manualThirdSlots() {
-      return [...new Set(matches
-        .flatMap(match => [match.a, match.b])
-        .filter(slot => /^3o Grupo [A-L/]+$/.test(slot)))];
+      return matches
+        .flatMap(match => [match.a, match.b]
+          .filter(slot => /^3o Grupo [A-L/]+$/.test(slot))
+          .map(slot => ({ slot, matchNumber: match.n })));
     }
 
     function renderManualThirds() {
@@ -2590,9 +2591,9 @@
         .filter(match => match.n < 73)
         .flatMap(match => [match.a, match.b]))].sort((a, b) => a.localeCompare(b, "pt-BR"));
 
-      manualThirdsGrid.innerHTML = slots.map(slot => `
+      manualThirdsGrid.innerHTML = slots.map(({ slot, matchNumber }) => `
         <div class="manual-third-row" data-slot="${slot}">
-          <div class="manual-third-slot">${slot}</div>
+          <div class="manual-third-slot">Jogo ${matchNumber} - ${slot}</div>
           <label>
             Sele&ccedil;&atilde;o
             <select class="manual-third-team">

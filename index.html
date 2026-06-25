@@ -206,6 +206,42 @@
       padding: 14px 0;
     }
 
+    .manual-thirds {
+      display: none;
+      gap: 10px;
+      margin: 14px 0 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(16, 37, 29, 0.45);
+    }
+
+    body.admin-mode .manual-thirds {
+      display: grid;
+    }
+
+    .manual-thirds h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .manual-thirds-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .manual-third-row {
+      display: grid;
+      grid-template-columns: minmax(170px, 1fr) minmax(180px, 1fr) auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .manual-third-slot {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     label {
       display: grid;
       gap: 4px;
@@ -781,6 +817,10 @@
       }
 
       .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .manual-third-row {
         grid-template-columns: 1fr;
       }
 
@@ -1486,6 +1526,12 @@
       <div id="extrasStatus" class="hint"></div>
     </section>
 
+    <section id="manualThirdsPanel" class="manual-thirds admin-only" aria-label="Terceiros colocados manuais">
+      <h2>Terceiros colocados do mata-mata</h2>
+      <div id="manualThirdsGrid" class="manual-thirds-grid"></div>
+      <div class="hint">Preencha manualmente as sele&ccedil;&otilde;es das vagas de 3&ordm; colocado usadas pela FIFA.</div>
+    </section>
+
     <section class="toolbar" aria-label="Filtros da tabela">
       <label>
         Buscar
@@ -1699,6 +1745,7 @@
     const statsDialog = document.querySelector("#statsDialog");
     const statsCloseBtn = document.querySelector("#statsCloseBtn");
     const statsBody = document.querySelector("#statsBody");
+    const manualThirdsGrid = document.querySelector("#manualThirdsGrid");
     const logoutBtn = document.querySelector("#logoutBtn");
     const sessionInfo = document.querySelector("#sessionInfo");
     const participants = ["Ana Paula", "Amilton", "Neto", "Diego", "Murilo", "Charles", "Fernando", "Cebola", "Guilherme"];
@@ -1712,12 +1759,17 @@
     let scores = {};
     let predictions = {};
     let extraPredictions = {};
+    let manualThirds = {};
     let userPasswords = {};
     let currentSession = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
     const dateFmt = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" });
 
     function firebaseEmailFor(name) {
       return `${name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, ".").replace(/^\.|\.$/g, "")}@bolaomohr.local`;
+    }
+
+    function manualThirdId(slot) {
+      return slot.replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "");
     }
 
     async function firebaseLoginExists(email, password) {
@@ -1739,13 +1791,15 @@
         scores: {},
         predictions: {},
         extraPredictions: {},
+        manualThirds: {},
         passwordUsers: []
       };
 
-      const [scoresSnap, predictionsSnap, extrasSnap, usersSnap] = await Promise.all([
+      const [scoresSnap, predictionsSnap, extrasSnap, manualThirdsSnap, usersSnap] = await Promise.all([
         firestore.collection("official_scores").get(),
         firestore.collection("predictions").get(),
         firestore.collection("extra_predictions").get(),
+        firestore.collection("manual_thirds").get(),
         firestore.collection("users").get()
       ]);
 
@@ -1781,6 +1835,12 @@
           brazilGoals: row.brazil_goals ?? row.brazilGoals ?? "",
           locked: Boolean(row.locked)
         };
+      });
+
+      manualThirdsSnap.forEach(doc => {
+        const row = doc.data();
+        const slot = String(row.slot || doc.id);
+        state.manualThirds[slot] = String(row.team ?? "");
       });
 
       usersSnap.forEach(doc => state.passwordUsers.push(doc.id));
@@ -1887,6 +1947,19 @@
         return { ok: true };
       }
 
+      if (path === "/api/manual-third") {
+        const slot = String(payload.slot || "");
+        const team = String(payload.team || "").trim();
+        if (!/^3o Grupo [A-L/]+$/.test(slot)) throw new Error("Vaga invalida.");
+        const ref = firestore.collection("manual_thirds").doc(manualThirdId(slot));
+        await ref.set({
+          slot,
+          team,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        return { ok: true };
+      }
+
       throw new Error("Rota nao encontrada.");
     }
 
@@ -1906,6 +1979,7 @@
       scores = state.scores || {};
       predictions = state.predictions || {};
       extraPredictions = state.extraPredictions || {};
+      manualThirds = state.manualThirds || {};
       userPasswords = {};
       (state.passwordUsers || []).forEach(name => {
         userPasswords[name] = true;
@@ -2504,9 +2578,65 @@
         .sort((a, b) => b.team.pts - a.team.pts || b.team.gd - a.team.gd || b.team.gf - a.team.gf || a.team.team.localeCompare(b.team.team));
     }
 
+    function manualThirdSlots() {
+      return [...new Set(matches
+        .flatMap(match => [match.a, match.b])
+        .filter(slot => /^3o Grupo [A-L/]+$/.test(slot)))];
+    }
+
+    function renderManualThirds() {
+      const slots = manualThirdSlots();
+      const teams = [...new Set(matches
+        .filter(match => match.n < 73)
+        .flatMap(match => [match.a, match.b]))].sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+      manualThirdsGrid.innerHTML = slots.map(slot => `
+        <div class="manual-third-row" data-slot="${slot}">
+          <div class="manual-third-slot">${slot}</div>
+          <label>
+            Sele&ccedil;&atilde;o
+            <select class="manual-third-team">
+              <option value="">Em branco</option>
+              ${teams.map(team => `<option value="${team}"${manualThirds[slot] === team ? " selected" : ""}>${team}</option>`).join("")}
+            </select>
+          </label>
+          <button class="save-manual-third primary" type="button">Salvar</button>
+        </div>
+      `).join("");
+
+      manualThirdsGrid.querySelectorAll(".save-manual-third").forEach(button => {
+        button.addEventListener("click", () => {
+          const row = button.closest(".manual-third-row");
+          const slot = row.dataset.slot;
+          const select = row.querySelector(".manual-third-team");
+          saveManualThird(slot, select.value, button);
+        });
+      });
+    }
+
+    async function saveManualThird(slot, team, button) {
+      if (!currentSession || currentSession.role !== "admin") return;
+
+      const previousText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Salvando";
+
+      try {
+        if (useDatabase) {
+          await apiRequest("/api/manual-third", { slot, team });
+        }
+        manualThirds[slot] = team;
+        render();
+        renderManualThirds();
+      } catch (error) {
+        alert(error.message || "Erro ao salvar terceiro colocado.");
+      } finally {
+        button.disabled = false;
+        button.textContent = previousText;
+      }
+    }
+
     function buildResolvedTeams() {
-      const usedThirdGroups = new Set();
-      const thirds = bestThirds();
       const map = {};
 
       matches.forEach(match => {
@@ -2526,12 +2656,7 @@
 
           const third = slot.match(/^3o Grupo ([A-L/]+)$/);
           if (third) {
-            const candidates = third[1].split("/");
-            const selected = thirds.find(item => candidates.includes(item.group) && !usedThirdGroups.has(item.group));
-            if (selected) {
-              usedThirdGroups.add(selected.group);
-              map[slot] = selected.team.team;
-            }
+            if (manualThirds[slot]) map[slot] = manualThirds[slot];
           }
         });
       });
@@ -2556,10 +2681,16 @@
       return map;
     }
 
+    function displayTeamName(slot, resolvedTeams) {
+      if (resolvedTeams[slot]) return resolvedTeams[slot];
+      if (/^3o Grupo [A-L/]+$/.test(slot)) return "";
+      return slot;
+    }
+
     function displayTeams(match, resolvedTeams) {
       return {
-        a: resolvedTeams[match.a] || match.a,
-        b: resolvedTeams[match.b] || match.b
+        a: displayTeamName(match.a, resolvedTeams),
+        b: displayTeamName(match.b, resolvedTeams)
       };
     }
 
@@ -2591,7 +2722,7 @@
     }
 
     function hasPlaceholderTeam(team) {
-      return /Grupo|Vencedor|Perdedor/.test(team);
+      return !team || /Grupo|Vencedor|Perdedor/.test(team);
     }
 
     function shouldShowMatchInTable(match, resolvedTeams) {
@@ -2791,6 +2922,7 @@
       const currentMatches = filteredMatches();
       const resolvedTeams = buildResolvedTeams();
 
+      if (isAdmin) renderManualThirds();
       body.innerHTML = "";
       let currentPhase = "";
       currentMatches.forEach(match => {

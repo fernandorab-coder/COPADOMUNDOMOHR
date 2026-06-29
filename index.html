@@ -1975,13 +1975,16 @@
     }
 
     const manualPredictionCorrections = [
-      { participant: "Ana Paula", matchNumber: "21", a: "1", b: "0" }
+      { participant: "Ana Paula", matchNumber: "21", a: "1", b: "0" },
+      { participant: "Fernando", matchNumber: "74", a: "2", b: "1" },
+      { participant: "Fernando", matchNumber: "75", a: "1", b: "1" }
     ];
 
     function applyManualPredictionCorrections() {
       manualPredictionCorrections.forEach(({ participant, matchNumber, a, b }) => {
         predictions[participant] = predictions[participant] || {};
-        if (predictions[participant][matchNumber]?.locked) return;
+        const current = predictions[participant][matchNumber];
+        if (current?.locked && current.a !== "" && current.a !== undefined && current.b !== "" && current.b !== undefined) return;
         predictions[participant][matchNumber] = { a, b, locked: true };
       });
     }
